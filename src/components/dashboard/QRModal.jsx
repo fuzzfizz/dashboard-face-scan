@@ -11,7 +11,7 @@ export default function QRModal({ event, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-neutral-800">QR Code</h2>
+          <h2 className="text-lg font-bold text-neutral-800">QR Code สำหรับลงทะเบียน</h2>
           <button onClick={onClose} className="p-2 rounded-lg hover:bg-neutral-100">
             <X className="w-5 h-5 text-neutral-500" />
           </button>

@@ -19,7 +19,7 @@ export default function ParticipantPieChart({ staffCount = 0, studentCount = 0, 
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6">
-      <h3 className="text-lg font-semibold text-neutral-800 mb-4">Participant Breakdown</h3>
+      <h3 className="text-lg font-semibold text-neutral-800 mb-4">สัดส่วนผู้เข้าร่วมตามสถานะ</h3>
       <ResponsiveContainer width="100%" height={280}>
         <PieChart>
           <Pie data={data} cx="50%" cy="50%" outerRadius={100} dataKey="value" label>

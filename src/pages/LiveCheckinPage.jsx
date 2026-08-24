@@ -65,7 +65,7 @@ export default function LiveCheckinPage() {
             to="/dashboard"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-medium transition-colors"
           >
-            ไปที่ Dashboard
+            กลับหน้าแดชบอร์ด
           </Link>
         </header>
 
@@ -78,7 +78,7 @@ export default function LiveCheckinPage() {
             </div>
             <button
               onClick={refetchEvents}
-              className="flex items-center gap-1.5 text-sm text-primary hover:text-primary-dark font-medium"
+              className="flex items-center gap-1.5 text-sm text-primary hover:text-primary-dark font-medium cursor-pointer"
             >
               <RefreshCw className={`w-4 h-4 ${eventsLoading ? 'animate-spin' : ''}`} />
               รีเฟรช
@@ -129,13 +129,13 @@ export default function LiveCheckinPage() {
               <Calendar className="w-12 h-12 text-neutral-300 mx-auto mb-3" />
               <h3 className="text-base font-semibold text-neutral-800 mb-1">ไม่พบกิจกรรมสำหรับวันนี้</h3>
               <p className="text-sm text-neutral-500 mb-6">
-                ไม่มีกิจกรรมที่จัดขึ้นในวันนี้ หรือคุณสามารถเลือกกิจกรรมจากช่วงวันที่อื่นๆ ได้ในหน้า Dashboard
+                ไม่มีกิจกรรมที่จัดขึ้นในวันนี้ หรือคุณสามารถเลือกกิจกรรมจากช่วงวันที่อื่นๆ ได้ในหน้าแดชบอร์ด
               </p>
               <Link
                 to="/dashboard"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary hover:bg-primary-dark text-white text-sm font-medium transition-colors"
               >
-                เลือกกิจกรรมจาก Dashboard
+                เลือกกิจกรรมจากหน้าแดชบอร์ด
               </Link>
             </div>
           )}
@@ -167,7 +167,7 @@ export default function LiveCheckinPage() {
           <div className="flex gap-3 justify-center">
             <button
               onClick={refetch}
-              className="px-4 py-2 rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50 text-sm font-medium transition-colors"
+              className="px-4 py-2 rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50 text-sm font-medium transition-colors cursor-pointer"
             >
               ลองใหม่อีกครั้ง
             </button>
@@ -175,7 +175,7 @@ export default function LiveCheckinPage() {
               to="/dashboard"
               className="px-4 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white text-sm font-medium transition-colors"
             >
-              กลับหน้า Dashboard
+              กลับหน้าแดชบอร์ด
             </Link>
           </div>
         </div>

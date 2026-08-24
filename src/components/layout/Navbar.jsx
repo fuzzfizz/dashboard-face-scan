@@ -12,7 +12,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           <Link to="/dashboard" className="flex items-center gap-2 font-bold text-xl">
             <ScanFace className="w-7 h-7" />
-            Face Scan Dashboard
+            ระบบแดชบอร์ด Face Scan
           </Link>
           <div className="flex items-center gap-1">
             <Link
@@ -24,7 +24,7 @@ export default function Navbar() {
               }`}
             >
               <LayoutDashboard className="w-4 h-4" />
-              Dashboard
+              แดชบอร์ดภาพรวม
             </Link>
             <Link
               to="/live"

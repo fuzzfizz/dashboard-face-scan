@@ -6,20 +6,31 @@ const typeDot = {
   guest: 'bg-yellow-500',
 }
 
-export default function ParticipantGrid({ participants, selectedId, onSelect }) {
+export default function ParticipantGrid({ participants = [], selectedId, onSelect }) {
   const sorted = [...participants].sort(
     (a, b) => new Date(b.regis_date) - new Date(a.regis_date)
   )
 
+  if (sorted.length === 0) {
+    return (
+      <div className="flex-1 flex items-center justify-center p-8 text-center text-neutral-400">
+        <div>
+          <p className="text-sm">ยังไม่มีผู้ลงทะเบียน / Check-in ในขณะนี้</p>
+          <p className="text-xs text-neutral-400 mt-1">ข้อมูลจะอัปเดตอัตโนมัติเมื่อมีการสแกนใบหน้า</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="overflow-y-auto flex-1">
       <table className="w-full text-sm">
-        <thead className="bg-neutral-50 sticky top-0 z-10">
+        <thead className="bg-neutral-50 sticky top-0 z-10 border-b border-neutral-200 text-xs text-neutral-600">
           <tr>
-            <th className="px-3 py-2.5 text-left">รูป</th>
-            <th className="px-3 py-2.5 text-left">ชื่อ</th>
-            <th className="px-3 py-2.5 text-left">สังกัด</th>
-            <th className="px-3 py-2.5 text-left">เวลา</th>
+            <th className="px-3 py-2.5 text-left w-14">รูป</th>
+            <th className="px-3 py-2.5 text-left">ชื่อ-นามสกุล</th>
+            <th className="px-3 py-2.5 text-left">สังกัด / แผนก</th>
+            <th className="px-3 py-2.5 text-left w-24">เวลา</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-100">

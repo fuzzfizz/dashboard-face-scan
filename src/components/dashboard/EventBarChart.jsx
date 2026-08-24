@@ -21,7 +21,7 @@ export default function EventBarChart({ events = [], participantsMap = {} }) {
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6">
-      <h3 className="text-lg font-semibold text-neutral-800 mb-4">Participants by Event Type</h3>
+      <h3 className="text-lg font-semibold text-neutral-800 mb-4">จำนวนผู้เข้าร่วมแยกตามประเภทกิจกรรม</h3>
       <ResponsiveContainer width="100%" height={280}>
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
