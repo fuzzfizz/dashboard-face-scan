@@ -43,15 +43,15 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
       {/* Header with Search and Page Size */}
-      <div className="px-6 py-4 border-b border-neutral-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-neutral-50/50">
+      <div className="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-neutral-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-neutral-50/50">
         <div>
-          <h2 className="text-lg font-bold text-neutral-800">รายการกิจกรรม</h2>
+          <h2 className="text-base sm:text-lg font-bold text-neutral-800">รายการกิจกรรม</h2>
           <p className="text-xs text-neutral-500 mt-0.5">
             กิจกรรมทั้งหมด {totalItems} รายการ
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
           {/* Search Input */}
           <div className="relative flex-1 sm:w-64">
             <Search className="w-4 h-4 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -63,7 +63,7 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
                 setSearchTerm(e.target.value)
                 setCurrentPage(1)
               }}
-              className="w-full pl-9 pr-3 py-1.5 bg-white border border-neutral-200 rounded-xl text-xs focus:outline-none focus:border-primary transition-colors"
+              className="w-full pl-9 pr-3 py-2 sm:py-1.5 bg-white border border-neutral-200 rounded-xl text-xs focus:outline-none focus:border-primary transition-colors"
             />
           </div>
 
@@ -74,7 +74,7 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
               setPageSize(Number(e.target.value))
               setCurrentPage(1)
             }}
-            className="bg-white border border-neutral-200 rounded-xl px-2.5 py-1.5 text-xs text-neutral-700 focus:outline-none focus:border-primary cursor-pointer"
+            className="bg-white border border-neutral-200 rounded-xl px-3 py-2 sm:py-1.5 text-xs text-neutral-700 focus:outline-none focus:border-primary cursor-pointer w-full sm:w-auto"
           >
             <option value={10}>10 รายการ/หน้า</option>
             <option value={20}>20 รายการ/หน้า</option>

@@ -37,22 +37,22 @@ export default function SummaryCards({ data = {}, loading, isToday = true, dateL
   ]
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       {cards.map((card) => (
         <div
           key={card.key}
-          className="bg-white rounded-xl shadow-sm border border-neutral-200 p-5 hover:border-neutral-300 transition-colors"
+          className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-3.5 sm:p-5 hover:border-neutral-300 transition-colors flex flex-col justify-between"
         >
-          <div className="flex items-center justify-between">
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-neutral-600 truncate">{card.label}</p>
-              <p className="text-3xl font-bold text-neutral-800 mt-1">
+          <div className="flex items-start justify-between gap-2">
+            <div className="min-w-0 flex-1">
+              <p className="text-xs sm:text-sm font-medium text-neutral-600 truncate">{card.label}</p>
+              <p className="text-2xl sm:text-3xl font-bold text-neutral-800 mt-1 tracking-tight">
                 {loading ? '...' : (data[card.key] ?? 0)}
               </p>
-              <p className="text-xs text-neutral-400 mt-0.5">{card.sublabel}</p>
+              <p className="text-[11px] sm:text-xs text-neutral-400 mt-0.5 truncate">{card.sublabel}</p>
             </div>
-            <div className={`p-3 rounded-xl ${card.bgLight} ${card.color} shrink-0`}>
-              <card.icon className="w-6 h-6" />
+            <div className={`p-2 sm:p-3 rounded-xl ${card.bgLight} ${card.color} shrink-0`}>
+              <card.icon className="w-4 h-4 sm:w-6 sm:h-6" />
             </div>
           </div>
         </div>

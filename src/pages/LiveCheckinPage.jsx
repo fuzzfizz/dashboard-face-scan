@@ -197,38 +197,41 @@ export default function LiveCheckinPage() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-neutral-50">
+    <div className="h-[100dvh] flex flex-col bg-neutral-50 overflow-hidden">
       {/* Header */}
-      <header className="bg-primary text-white px-6 py-3 flex items-center justify-between shadow-lg">
-        <div className="flex items-center gap-4">
+      <header className="bg-primary text-white px-3.5 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between shadow-lg shrink-0">
+        <div className="flex items-center gap-2.5 sm:gap-4 min-w-0 flex-1 mr-2">
           <button
             onClick={handleBack}
-            className="p-1.5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer shrink-0"
             title="ย้อนกลับไปหน้าแดชบอร์ด"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <div className="flex items-center gap-2">
-            <ScanFace className="w-6 h-6" />
-            <div>
-              <h1 className="font-bold text-lg leading-tight">{event?.event_title || 'Live Check-in'}</h1>
-              <p className="text-white/70 text-xs">
-                {event?.event_addr} • {formatTime(event?.event_time_start)} - {formatTime(event?.event_time_stop)}
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            <ScanFace className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
+            <div className="min-w-0 flex-1">
+              <h1 className="font-bold text-sm sm:text-lg leading-tight truncate">
+                {event?.event_title || 'Live Check-in'}
+              </h1>
+              <p className="text-white/70 text-[11px] sm:text-xs truncate hidden xs:block sm:block">
+                {event?.event_addr ? `${event.event_addr} • ` : ''}
+                {formatTime(event?.event_time_start)} - {formatTime(event?.event_time_stop)}
               </p>
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           <button
             onClick={handleRefresh}
-            className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+            className="p-1.5 sm:p-2 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
             title="รีเฟรช"
           >
-            <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 ${loading ? 'animate-spin' : ''}`} />
           </button>
           <button
             onClick={toggle}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+            className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer whitespace-nowrap ${
               isActive ? 'bg-white/20' : 'bg-white/10'
             }`}
           >
@@ -237,17 +240,20 @@ export default function LiveCheckinPage() {
         </div>
       </header>
 
-      {/* Main Content — Split Screen */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Left Panel — Photo */}
-        <div className="w-2/5 bg-white border-r border-neutral-200 flex items-center justify-center">
+      {/* Main Content — Split Screen (Vertical on mobile, Horizontal on desktop) */}
+      <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
+        {/* Left / Top Panel — Photo */}
+        <div className="w-full lg:w-2/5 bg-white border-b lg:border-b-0 lg:border-r border-neutral-200 shrink-0 flex items-center justify-center shadow-xs lg:shadow-none">
           <PhotoDisplay participant={displayParticipant} />
         </div>
 
-        {/* Right Panel — Grid + Summary */}
-        <div className="w-3/5 flex flex-col">
-          <div className="px-4 py-3 bg-white border-b border-neutral-200">
-            <h3 className="font-semibold text-neutral-800">รายชื่อผู้ Check-in</h3>
+        {/* Right / Bottom Panel — Grid + Summary */}
+        <div className="w-full lg:w-3/5 flex-1 min-h-0 flex flex-col bg-neutral-50">
+          <div className="px-4 py-2.5 sm:py-3 bg-white border-b border-neutral-200 flex items-center justify-between shrink-0">
+            <h3 className="font-semibold text-xs sm:text-sm text-neutral-800">รายชื่อผู้ Check-in</h3>
+            <span className="text-[11px] sm:text-xs text-neutral-400">
+              {participants.length} คน
+            </span>
           </div>
           <ParticipantGrid
             participants={participants}
@@ -259,9 +265,9 @@ export default function LiveCheckinPage() {
       </div>
 
       {/* Footer Status */}
-      <footer className="bg-white border-t border-neutral-200 px-6 py-2 flex items-center justify-between text-xs text-neutral-500">
-        <span>สแกนล่าสุด: {lastScanTime}</span>
-        <span>Auto-refresh: {isActive ? `ON (ทุก 5 วินาที)` : 'OFF'}</span>
+      <footer className="bg-white border-t border-neutral-200 px-4 sm:px-6 py-1.5 sm:py-2 flex items-center justify-between text-[11px] sm:text-xs text-neutral-500 shrink-0">
+        <span className="truncate">สแกนล่าสุด: {lastScanTime}</span>
+        <span className="shrink-0 ml-2">Auto-refresh: {isActive ? `ON (5s)` : 'OFF'}</span>
       </footer>
     </div>
   )

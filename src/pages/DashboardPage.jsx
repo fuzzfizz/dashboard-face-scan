@@ -111,16 +111,16 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-neutral-50">
       <Navbar />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+      <main className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 sm:space-y-6">
         {/* Compact & Intuitive Date Filter Toolbar */}
-        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-5">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-4 sm:p-5">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3.5 sm:gap-4">
             {/* Header + Range Status Badge */}
             <div>
-              <div className="flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-primary" />
-                <h1 className="text-lg font-bold text-neutral-800">ช่วงเวลาแสดงข้อมูล</h1>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary-light text-primary-dark">
+              <div className="flex flex-wrap items-center gap-2">
+                <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0" />
+                <h1 className="text-base sm:text-lg font-bold text-neutral-800">ช่วงเวลาแสดงข้อมูล</h1>
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary-light text-primary-dark truncate max-w-full">
                   {dateLabel}
                 </span>
               </div>
@@ -130,10 +130,10 @@ export default function DashboardPage() {
             </div>
 
             {/* Quick Presets Buttons */}
-            <div className="flex flex-wrap items-center gap-1.5 bg-neutral-100/80 p-1.5 rounded-xl self-start lg:self-auto">
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 bg-neutral-100/80 p-1.5 rounded-xl w-full sm:w-auto">
               <button
                 onClick={() => applyPreset('today')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-center ${
                   activePreset === 'today' && isToday
                     ? 'bg-white text-primary shadow-sm font-semibold'
                     : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
@@ -143,7 +143,7 @@ export default function DashboardPage() {
               </button>
               <button
                 onClick={() => applyPreset('7days')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-center ${
                   activePreset === '7days'
                     ? 'bg-white text-primary shadow-sm font-semibold'
                     : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
@@ -153,7 +153,7 @@ export default function DashboardPage() {
               </button>
               <button
                 onClick={() => applyPreset('month')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-center ${
                   activePreset === 'month'
                     ? 'bg-white text-primary shadow-sm font-semibold'
                     : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
@@ -163,7 +163,7 @@ export default function DashboardPage() {
               </button>
               <button
                 onClick={() => applyPreset('year')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-center ${
                   activePreset === 'year'
                     ? 'bg-white text-primary shadow-sm font-semibold'
                     : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
@@ -174,13 +174,13 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <hr className="my-4 border-neutral-100" />
+          <hr className="my-3.5 sm:my-4 border-neutral-100" />
 
           {/* Custom Date Pickers & Actions */}
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-2 bg-neutral-50 px-3 py-1.5 rounded-xl border border-neutral-200">
-                <span className="text-xs font-medium text-neutral-500">ตั้งแต่:</span>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+            <div className="grid grid-cols-1 sm:flex sm:flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
+              <div className="flex items-center justify-between sm:justify-start gap-2 bg-neutral-50 px-3 py-2 sm:py-1.5 rounded-xl border border-neutral-200 w-full sm:w-auto">
+                <span className="text-xs font-medium text-neutral-500 shrink-0">ตั้งแต่:</span>
                 <input
                   type="date"
                   value={startDate}
@@ -188,14 +188,14 @@ export default function DashboardPage() {
                     setStartDate(e.target.value)
                     setActivePreset('custom')
                   }}
-                  className="bg-transparent text-sm text-neutral-800 font-medium focus:outline-none cursor-pointer"
+                  className="bg-transparent text-xs sm:text-sm text-neutral-800 font-medium focus:outline-none cursor-pointer w-full sm:w-auto text-right sm:text-left"
                 />
               </div>
 
-              <ArrowRight className="w-4 h-4 text-neutral-400 hidden sm:block" />
+              <ArrowRight className="w-4 h-4 text-neutral-400 hidden sm:block self-center shrink-0" />
 
-              <div className="flex items-center gap-2 bg-neutral-50 px-3 py-1.5 rounded-xl border border-neutral-200">
-                <span className="text-xs font-medium text-neutral-500">ถึง:</span>
+              <div className="flex items-center justify-between sm:justify-start gap-2 bg-neutral-50 px-3 py-2 sm:py-1.5 rounded-xl border border-neutral-200 w-full sm:w-auto">
+                <span className="text-xs font-medium text-neutral-500 shrink-0">ถึง:</span>
                 <input
                   type="date"
                   value={endDate}
@@ -203,7 +203,7 @@ export default function DashboardPage() {
                     setEndDate(e.target.value)
                     setActivePreset('custom')
                   }}
-                  className="bg-transparent text-sm text-neutral-800 font-medium focus:outline-none cursor-pointer"
+                  className="bg-transparent text-xs sm:text-sm text-neutral-800 font-medium focus:outline-none cursor-pointer w-full sm:w-auto text-right sm:text-left"
                 />
               </div>
             </div>
@@ -211,9 +211,9 @@ export default function DashboardPage() {
             <button
               onClick={refetch}
               disabled={loading}
-              className="flex items-center gap-2 bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors shadow-sm disabled:opacity-70 cursor-pointer"
+              className="flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white px-4 py-2 sm:py-2 rounded-xl text-xs sm:text-sm font-medium transition-colors shadow-sm disabled:opacity-70 cursor-pointer w-full sm:w-auto shrink-0"
             >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${loading ? 'animate-spin' : ''}`} />
               <span>รีเฟรชข้อมูล</span>
             </button>
           </div>

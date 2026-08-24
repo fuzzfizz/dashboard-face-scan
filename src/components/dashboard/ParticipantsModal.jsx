@@ -47,49 +47,49 @@ export default function ParticipantsModal({ eventId, onClose }) {
   const endRecord = Math.min(safeCurrentPage * pageSize, totalItems)
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-2 sm:p-4" onClick={onClose}>
       <div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden"
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92dvh] flex flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 bg-neutral-50/50">
-          <div>
-            <h2 className="text-lg font-bold text-neutral-800">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-neutral-200 bg-neutral-50/50">
+          <div className="min-w-0 flex-1 mr-2">
+            <h2 className="text-base sm:text-lg font-bold text-neutral-800 truncate">
               {event?.event_title || 'รายชื่อผู้เข้าร่วมกิจกรรม'}
             </h2>
             {event && (
-              <p className="text-xs text-neutral-500 mt-0.5">
+              <p className="text-[11px] sm:text-xs text-neutral-500 mt-0.5 truncate">
                 สถานที่: {event.event_addr || '-'} • วันที่: {event.event_date || '-'}
               </p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl hover:bg-neutral-200 text-neutral-500 hover:text-neutral-800 transition-colors cursor-pointer"
+            className="p-1.5 sm:p-2 rounded-xl hover:bg-neutral-200 text-neutral-500 hover:text-neutral-800 transition-colors cursor-pointer shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Summary Bar */}
-        <div className="flex flex-wrap items-center gap-4 sm:gap-6 px-6 py-2.5 bg-neutral-50 border-b border-neutral-200 text-xs">
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-6 px-4 sm:px-6 py-2 sm:py-2.5 bg-neutral-50 border-b border-neutral-200 text-xs">
           <span className="flex items-center gap-1.5 text-neutral-700">
-            <Users className="w-4 h-4 text-neutral-500" /> ทั้งหมด: <b>{summary.total}</b> คน
+            <Users className="w-4 h-4 text-neutral-500 shrink-0" /> ทั้งหมด: <b>{summary.total}</b> คน
           </span>
           <span className="flex items-center gap-1.5 text-green-700">
-            <UserCheck className="w-4 h-4" /> Staff: <b>{summary.staff}</b> คน
+            <UserCheck className="w-4 h-4 shrink-0" /> Staff: <b>{summary.staff}</b> คน
           </span>
           <span className="flex items-center gap-1.5 text-blue-700">
-            <GraduationCap className="w-4 h-4" /> Student: <b>{summary.student}</b> คน
+            <GraduationCap className="w-4 h-4 shrink-0" /> Student: <b>{summary.student}</b> คน
           </span>
           <span className="flex items-center gap-1.5 text-yellow-700">
-            <UserPlus className="w-4 h-4" /> Guest: <b>{summary.guest}</b> คน
+            <UserPlus className="w-4 h-4 shrink-0" /> Guest: <b>{summary.guest}</b> คน
           </span>
         </div>
 
         {/* Search & Toolbar */}
-        <div className="px-6 py-3 border-b border-neutral-100 flex items-center justify-between gap-3 bg-white">
+        <div className="px-4 sm:px-6 py-2.5 sm:py-3 border-b border-neutral-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3 bg-white">
           <div className="relative flex-1 sm:max-w-xs">
             <Search className="w-4 h-4 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
@@ -110,7 +110,7 @@ export default function ParticipantsModal({ eventId, onClose }) {
               setPageSize(Number(e.target.value))
               setCurrentPage(1)
             }}
-            className="bg-neutral-50 border border-neutral-200 rounded-xl px-2.5 py-1.5 text-xs text-neutral-700 focus:outline-none cursor-pointer"
+            className="bg-neutral-50 border border-neutral-200 rounded-xl px-2.5 py-1.5 text-xs text-neutral-700 focus:outline-none cursor-pointer w-full sm:w-auto"
           >
             <option value={15}>15 คน/หน้า</option>
             <option value={30}>30 คน/หน้า</option>
