@@ -17,7 +17,7 @@ export default function Navbar() {
             className="flex items-center gap-2 font-bold text-base sm:text-xl shrink-0"
           >
             <ScanFace className="w-6 h-6 sm:w-7 h-7" />
-            <span className="hidden sm:inline">ระบบแดชบอร์ด Face Scan</span>
+            <span className="hidden sm:inline">Dashboard Face Attendance</span>
             <span className="sm:hidden font-bold">Face Scan</span>
           </Link>
           <div className="flex items-center gap-1 sm:gap-1.5">
@@ -30,7 +30,7 @@ export default function Navbar() {
               }`}
             >
               <LayoutDashboard className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-              <span>แดชบอร์ด</span>
+              <span>Dashboard</span>
             </Link>
             <Link
               to="/live"
