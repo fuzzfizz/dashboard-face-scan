@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #5c990e;
+  --color-primary-dark: #4a7d0b;
+  --color-primary-light: #e8f5d9;
+}
+
+body {
+  font-family: 'Noto Sans Thai', 'Inter', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
