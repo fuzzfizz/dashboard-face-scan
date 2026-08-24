@@ -109,64 +109,64 @@ export default function DashboardPage() {
   const loading = eventsLoading || summaryLoading
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 transition-colors duration-200">
       <Navbar />
       <main className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 sm:space-y-6">
         {/* Compact & Intuitive Date Filter Toolbar */}
-        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-4 sm:p-5">
+        <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-700 p-4 sm:p-5 transition-colors">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3.5 sm:gap-4">
             {/* Header + Range Status Badge */}
             <div>
               <div className="flex flex-wrap items-center gap-2">
                 <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0" />
-                <h1 className="text-base sm:text-lg font-bold text-neutral-800">ช่วงเวลาแสดงข้อมูล</h1>
+                <h1 className="text-base sm:text-lg font-bold text-neutral-800 dark:text-neutral-100">ช่วงเวลาแสดงข้อมูล</h1>
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary-light text-primary-dark truncate max-w-full">
                   {dateLabel}
                 </span>
               </div>
-              <p className="text-xs text-neutral-500 mt-1">
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
                 เลือกช่วงเวลาที่ต้องการดูสถิติและรายชื่อกิจกรรมสแกนใบหน้า
               </p>
             </div>
 
             {/* Quick Presets Buttons */}
-            <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 bg-neutral-100/80 p-1.5 rounded-xl w-full sm:w-auto">
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 bg-neutral-100/80 dark:bg-neutral-700/60 p-1.5 rounded-xl w-full sm:w-auto">
               <button
                 onClick={() => applyPreset('today')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-center ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-center cursor-pointer ${
                   activePreset === 'today' && isToday
-                    ? 'bg-white text-primary shadow-sm font-semibold'
-                    : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
+                    ? 'bg-white dark:bg-neutral-900 text-primary dark:text-primary shadow-sm font-semibold'
+                    : 'text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-neutral-600/50'
                 }`}
               >
                 วันนี้
               </button>
               <button
                 onClick={() => applyPreset('7days')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-center ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-center cursor-pointer ${
                   activePreset === '7days'
-                    ? 'bg-white text-primary shadow-sm font-semibold'
-                    : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
+                    ? 'bg-white dark:bg-neutral-900 text-primary dark:text-primary shadow-sm font-semibold'
+                    : 'text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-neutral-600/50'
                 }`}
               >
                 7 วันล่าสุด
               </button>
               <button
                 onClick={() => applyPreset('month')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-center ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-center cursor-pointer ${
                   activePreset === 'month'
-                    ? 'bg-white text-primary shadow-sm font-semibold'
-                    : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
+                    ? 'bg-white dark:bg-neutral-900 text-primary dark:text-primary shadow-sm font-semibold'
+                    : 'text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-neutral-600/50'
                 }`}
               >
                 เดือนนี้
               </button>
               <button
                 onClick={() => applyPreset('year')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-center ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-center cursor-pointer ${
                   activePreset === 'year'
-                    ? 'bg-white text-primary shadow-sm font-semibold'
-                    : 'text-neutral-600 hover:text-neutral-900 hover:bg-white/50'
+                    ? 'bg-white dark:bg-neutral-900 text-primary dark:text-primary shadow-sm font-semibold'
+                    : 'text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-neutral-600/50'
                 }`}
               >
                 ปีนี้
@@ -174,13 +174,13 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <hr className="my-3.5 sm:my-4 border-neutral-100" />
+          <hr className="my-3.5 sm:my-4 border-neutral-100 dark:border-neutral-700" />
 
           {/* Custom Date Pickers & Actions */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
             <div className="grid grid-cols-1 sm:flex sm:flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
-              <div className="flex items-center justify-between sm:justify-start gap-2 bg-neutral-50 px-3 py-2 sm:py-1.5 rounded-xl border border-neutral-200 w-full sm:w-auto">
-                <span className="text-xs font-medium text-neutral-500 shrink-0">ตั้งแต่:</span>
+              <div className="flex items-center justify-between sm:justify-start gap-2 bg-neutral-50 dark:bg-neutral-900/80 px-3 py-2 sm:py-1.5 rounded-xl border border-neutral-200 dark:border-neutral-700 w-full sm:w-auto">
+                <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400 shrink-0">ตั้งแต่:</span>
                 <input
                   type="date"
                   value={startDate}
@@ -188,14 +188,14 @@ export default function DashboardPage() {
                     setStartDate(e.target.value)
                     setActivePreset('custom')
                   }}
-                  className="bg-transparent text-xs sm:text-sm text-neutral-800 font-medium focus:outline-none cursor-pointer w-full sm:w-auto text-right sm:text-left"
+                  className="bg-transparent text-xs sm:text-sm text-neutral-800 dark:text-neutral-100 font-medium focus:outline-none cursor-pointer w-full sm:w-auto text-right sm:text-left"
                 />
               </div>
 
               <ArrowRight className="w-4 h-4 text-neutral-400 hidden sm:block self-center shrink-0" />
 
-              <div className="flex items-center justify-between sm:justify-start gap-2 bg-neutral-50 px-3 py-2 sm:py-1.5 rounded-xl border border-neutral-200 w-full sm:w-auto">
-                <span className="text-xs font-medium text-neutral-500 shrink-0">ถึง:</span>
+              <div className="flex items-center justify-between sm:justify-start gap-2 bg-neutral-50 dark:bg-neutral-900/80 px-3 py-2 sm:py-1.5 rounded-xl border border-neutral-200 dark:border-neutral-700 w-full sm:w-auto">
+                <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400 shrink-0">ถึง:</span>
                 <input
                   type="date"
                   value={endDate}
@@ -203,7 +203,7 @@ export default function DashboardPage() {
                     setEndDate(e.target.value)
                     setActivePreset('custom')
                   }}
-                  className="bg-transparent text-xs sm:text-sm text-neutral-800 font-medium focus:outline-none cursor-pointer w-full sm:w-auto text-right sm:text-left"
+                  className="bg-transparent text-xs sm:text-sm text-neutral-800 dark:text-neutral-100 font-medium focus:outline-none cursor-pointer w-full sm:w-auto text-right sm:text-left"
                 />
               </div>
             </div>

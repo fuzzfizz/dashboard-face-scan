@@ -59,43 +59,43 @@ export default function ParticipantsModal({ eventId, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-2 sm:p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-2 sm:p-4 backdrop-blur-xs" onClick={onClose}>
       <div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92dvh] flex flex-col overflow-hidden"
+        className="bg-white dark:bg-neutral-850 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92dvh] flex flex-col overflow-hidden border border-neutral-200 dark:border-neutral-700 transition-colors"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-neutral-200 bg-neutral-50/50">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-neutral-200 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-800/80">
           <div className="min-w-0 flex-1 mr-2">
-            <h2 className="text-base sm:text-lg font-bold text-neutral-800 truncate">
+            <h2 className="text-base sm:text-lg font-bold text-neutral-800 dark:text-neutral-100 truncate">
               {event?.event_title || 'รายชื่อผู้เข้าร่วมกิจกรรม'}
             </h2>
             {event && (
-              <p className="text-[11px] sm:text-xs text-neutral-500 mt-0.5 truncate">
+              <p className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 truncate">
                 สถานที่: {event.event_addr || '-'} • วันที่: {event.event_date || '-'}
               </p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 sm:p-2 rounded-xl hover:bg-neutral-200 text-neutral-500 hover:text-neutral-800 transition-colors cursor-pointer shrink-0"
+            className="p-1.5 sm:p-2 rounded-xl hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-white transition-colors cursor-pointer shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Interactive Summary & Filter Tabs */}
-        <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2 sm:py-2.5 bg-neutral-50 border-b border-neutral-200 text-xs">
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2 sm:py-2.5 bg-neutral-50 dark:bg-neutral-900/60 border-b border-neutral-200 dark:border-neutral-700 text-xs">
           <button
             onClick={() => handleTypeSelect('all')}
             className={`flex items-center justify-between sm:justify-start gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
               selectedType === 'all'
-                ? 'bg-white shadow-xs border border-neutral-300 text-neutral-900 font-semibold ring-2 ring-primary/20'
-                : 'text-neutral-600 hover:bg-white/80'
+                ? 'bg-white dark:bg-neutral-800 shadow-xs border border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 font-semibold ring-2 ring-primary/20'
+                : 'text-neutral-600 dark:text-neutral-400 hover:bg-white/80 dark:hover:bg-neutral-800/60'
             }`}
           >
             <span className="flex items-center gap-1.5">
-              <Users className="w-3.5 h-3.5 text-neutral-500 shrink-0" /> ทั้งหมด:
+              <Users className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400 shrink-0" /> ทั้งหมด:
             </span>
             <b>{summary.total}</b>
           </button>
@@ -104,8 +104,8 @@ export default function ParticipantsModal({ eventId, onClose }) {
             onClick={() => handleTypeSelect('staff')}
             className={`flex items-center justify-between sm:justify-start gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
               selectedType === 'staff'
-                ? 'bg-green-50 shadow-xs border border-green-300 text-green-800 font-semibold ring-2 ring-green-500/20'
-                : 'text-green-700 hover:bg-green-50/50'
+                ? 'bg-green-50 dark:bg-green-950/40 shadow-xs border border-green-300 dark:border-green-800 text-green-800 dark:text-green-300 font-semibold ring-2 ring-green-500/20'
+                : 'text-green-700 dark:text-green-400 hover:bg-green-50/50 dark:hover:bg-green-950/20'
             }`}
           >
             <span className="flex items-center gap-1.5">
@@ -118,8 +118,8 @@ export default function ParticipantsModal({ eventId, onClose }) {
             onClick={() => handleTypeSelect('student')}
             className={`flex items-center justify-between sm:justify-start gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
               selectedType === 'student'
-                ? 'bg-blue-50 shadow-xs border border-blue-300 text-blue-800 font-semibold ring-2 ring-blue-500/20'
-                : 'text-blue-700 hover:bg-blue-50/50'
+                ? 'bg-blue-50 dark:bg-blue-950/40 shadow-xs border border-blue-300 dark:border-blue-800 text-blue-800 dark:text-blue-300 font-semibold ring-2 ring-blue-500/20'
+                : 'text-blue-700 dark:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-950/20'
             }`}
           >
             <span className="flex items-center gap-1.5">
@@ -132,8 +132,8 @@ export default function ParticipantsModal({ eventId, onClose }) {
             onClick={() => handleTypeSelect('guest')}
             className={`flex items-center justify-between sm:justify-start gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
               selectedType === 'guest'
-                ? 'bg-yellow-50 shadow-xs border border-yellow-300 text-yellow-800 font-semibold ring-2 ring-yellow-500/20'
-                : 'text-yellow-700 hover:bg-yellow-50/50'
+                ? 'bg-yellow-50 dark:bg-yellow-950/40 shadow-xs border border-yellow-300 dark:border-yellow-800 text-yellow-800 dark:text-yellow-300 font-semibold ring-2 ring-yellow-500/20'
+                : 'text-yellow-700 dark:text-yellow-400 hover:bg-yellow-50/50 dark:hover:bg-yellow-950/20'
             }`}
           >
             <span className="flex items-center gap-1.5">
@@ -144,7 +144,7 @@ export default function ParticipantsModal({ eventId, onClose }) {
         </div>
 
         {/* Search & Toolbar */}
-        <div className="px-4 sm:px-6 py-2.5 sm:py-3 border-b border-neutral-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3 bg-white">
+        <div className="px-4 sm:px-6 py-2.5 sm:py-3 border-b border-neutral-100 dark:border-neutral-700 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3 bg-white dark:bg-neutral-850">
           <div className="relative flex-1 sm:max-w-xs">
             <Search className="w-4 h-4 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
@@ -155,7 +155,7 @@ export default function ParticipantsModal({ eventId, onClose }) {
                 setSearchTerm(e.target.value)
                 setCurrentPage(1)
               }}
-              className="w-full pl-9 pr-3 py-1.5 bg-neutral-50 border border-neutral-200 rounded-xl text-xs focus:outline-none focus:border-primary transition-colors"
+              className="w-full pl-9 pr-3 py-1.5 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 rounded-xl text-xs focus:outline-none focus:border-primary transition-colors"
             />
           </div>
 
@@ -165,7 +165,7 @@ export default function ParticipantsModal({ eventId, onClose }) {
               setPageSize(Number(e.target.value))
               setCurrentPage(1)
             }}
-            className="bg-neutral-50 border border-neutral-200 rounded-xl px-2.5 py-1.5 text-xs text-neutral-700 focus:outline-none cursor-pointer w-full sm:w-auto"
+            className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl px-2.5 py-1.5 text-xs text-neutral-700 dark:text-neutral-200 focus:outline-none cursor-pointer w-full sm:w-auto"
           >
             <option value={15}>15 คน/หน้า</option>
             <option value={30}>30 คน/หน้า</option>
@@ -174,20 +174,20 @@ export default function ParticipantsModal({ eventId, onClose }) {
         </div>
 
         {/* Table Content */}
-        <div className="overflow-y-auto flex-1">
+        <div className="overflow-y-auto flex-1 bg-white dark:bg-neutral-850">
           {loading && (
-            <div className="p-12 text-center text-neutral-400 text-sm">
+            <div className="p-12 text-center text-neutral-400 dark:text-neutral-500 text-sm">
               กำลังโหลดข้อมูลรายชื่อผู้เข้าร่วม...
             </div>
           )}
           {error && (
-            <div className="p-8 text-center text-red-500 text-sm">
+            <div className="p-8 text-center text-red-500 dark:text-red-400 text-sm">
               {error}
             </div>
           )}
           {!loading && !error && (
             <table className="w-full text-sm">
-              <thead className="bg-neutral-50 text-neutral-600 sticky top-0 border-b border-neutral-200 text-xs">
+              <thead className="bg-neutral-50 dark:bg-neutral-900/80 text-neutral-600 dark:text-neutral-300 sticky top-0 border-b border-neutral-200 dark:border-neutral-700 text-xs">
                 <tr>
                   <th className="px-4 py-2.5 text-left w-12">#</th>
                   <th className="px-4 py-2.5 text-left w-16">รูปภาพ</th>
@@ -197,11 +197,11 @@ export default function ParticipantsModal({ eventId, onClose }) {
                   <th className="px-4 py-2.5 text-left">เวลาที่ Check-in</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-100">
+              <tbody className="divide-y divide-neutral-100 dark:divide-neutral-700">
                 {paginatedList.length > 0 ? (
                   paginatedList.map((p, idx) => (
-                    <tr key={p.regis_id} className="hover:bg-neutral-50/80 transition-colors">
-                      <td className="px-4 py-2.5 text-neutral-400 text-xs font-medium">
+                    <tr key={p.regis_id} className="hover:bg-neutral-50/80 dark:hover:bg-neutral-700/40 transition-colors">
+                      <td className="px-4 py-2.5 text-neutral-400 dark:text-neutral-500 text-xs font-medium">
                         {startRecord + idx}
                       </td>
                       <td className="px-4 py-2.5">
@@ -209,7 +209,7 @@ export default function ParticipantsModal({ eventId, onClose }) {
                           <img
                             src={p.participant_photo}
                             alt={p.participant_name}
-                            className="w-8 h-8 rounded-full object-cover border border-neutral-200"
+                            className="w-8 h-8 rounded-full object-cover border border-neutral-200 dark:border-neutral-700"
                             onError={(e) => {
                               e.target.style.display = 'none'
                               e.target.nextSibling.style.display = 'flex'
@@ -217,14 +217,14 @@ export default function ParticipantsModal({ eventId, onClose }) {
                           />
                         ) : null}
                         <div
-                          className={`w-8 h-8 rounded-full bg-primary-light text-primary font-bold text-xs items-center justify-center ${
+                          className={`w-8 h-8 rounded-full bg-primary-light dark:bg-primary/20 text-primary dark:text-primary-light font-bold text-xs items-center justify-center ${
                             p.participant_photo ? 'hidden' : 'flex'
                           }`}
                         >
                           {getInitial(p.participant_name)}
                         </div>
                       </td>
-                      <td className="px-4 py-2.5 font-medium text-neutral-800">
+                      <td className="px-4 py-2.5 font-medium text-neutral-800 dark:text-neutral-100">
                         {p.participant_name}
                       </td>
                       <td className="px-4 py-2.5">
@@ -236,17 +236,17 @@ export default function ParticipantsModal({ eventId, onClose }) {
                           {typeThai[p.user_type] || p.user_type || 'Guest'}
                         </span>
                       </td>
-                      <td className="px-4 py-2.5 text-neutral-600 text-xs">
+                      <td className="px-4 py-2.5 text-neutral-600 dark:text-neutral-400 text-xs">
                         {p.user_department || '-'}
                       </td>
-                      <td className="px-4 py-2.5 text-neutral-600 text-xs whitespace-nowrap">
+                      <td className="px-4 py-2.5 text-neutral-600 dark:text-neutral-400 text-xs whitespace-nowrap">
                         {formatDateTime(p.regis_date)}
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={6} className="px-4 py-8 text-center text-neutral-400 text-sm">
+                    <td colSpan={6} className="px-4 py-8 text-center text-neutral-400 dark:text-neutral-500 text-sm">
                       {searchTerm
                         ? `ไม่พบรายชื่อที่ตรงกับการค้นหา "${searchTerm}"`
                         : selectedType !== 'all'
@@ -262,7 +262,7 @@ export default function ParticipantsModal({ eventId, onClose }) {
 
         {/* Modal Pagination Footer */}
         {totalItems > 0 && (
-          <div className="px-6 py-3 border-t border-neutral-200 bg-neutral-50/50 flex items-center justify-between text-xs text-neutral-500">
+          <div className="px-6 py-3 border-t border-neutral-200 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-800/80 flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
             <div>
               แสดง {startRecord} - {endRecord} จากทั้งหมด {totalItems} คน
             </div>
@@ -271,20 +271,20 @@ export default function ParticipantsModal({ eventId, onClose }) {
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={safeCurrentPage <= 1}
-                className="p-1 rounded-lg border border-neutral-200 bg-white hover:bg-neutral-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                className="p-1 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
                 title="หน้าก่อนหน้า"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
 
-              <span className="px-1.5 font-medium text-neutral-700">
+              <span className="px-1.5 font-medium text-neutral-700 dark:text-neutral-200">
                 {safeCurrentPage} / {totalPages}
               </span>
 
               <button
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 disabled={safeCurrentPage >= totalPages}
-                className="p-1 rounded-lg border border-neutral-200 bg-white hover:bg-neutral-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                className="p-1 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
                 title="หน้าถัดไป"
               >
                 <ChevronRight className="w-4 h-4" />

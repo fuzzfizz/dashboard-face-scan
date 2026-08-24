@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-primary: #5c990e;
   --color-primary-dark: #4a7d0b;
@@ -8,6 +10,11 @@
 
 body {
   font-family: 'Noto Sans Thai', 'Inter', sans-serif;
+  @apply bg-neutral-50 text-neutral-800 transition-colors duration-200;
+}
+
+.dark body {
+  @apply bg-neutral-900 text-neutral-100;
 }
 
 html {

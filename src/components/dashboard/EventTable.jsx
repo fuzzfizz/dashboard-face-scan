@@ -42,12 +42,12 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
+    <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-700 overflow-hidden transition-colors">
       {/* Header with Search and Page Size */}
-      <div className="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-neutral-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-neutral-50/50">
+      <div className="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-neutral-200 dark:border-neutral-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-neutral-50/50 dark:bg-neutral-800/80">
         <div>
-          <h2 className="text-base sm:text-lg font-bold text-neutral-800">รายการกิจกรรม</h2>
-          <p className="text-xs text-neutral-500 mt-0.5">
+          <h2 className="text-base sm:text-lg font-bold text-neutral-800 dark:text-neutral-100">รายการกิจกรรม</h2>
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
             กิจกรรมทั้งหมด {totalItems} รายการ
           </p>
         </div>
@@ -64,7 +64,7 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
                 setSearchTerm(e.target.value)
                 setCurrentPage(1)
               }}
-              className="w-full pl-9 pr-3 py-2 sm:py-1.5 bg-white border border-neutral-200 rounded-xl text-xs focus:outline-none focus:border-primary transition-colors"
+              className="w-full pl-9 pr-3 py-2 sm:py-1.5 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 rounded-xl text-xs focus:outline-none focus:border-primary transition-colors"
             />
           </div>
 
@@ -75,7 +75,7 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
               setPageSize(Number(e.target.value))
               setCurrentPage(1)
             }}
-            className="bg-white border border-neutral-200 rounded-xl px-3 py-2 sm:py-1.5 text-xs text-neutral-700 focus:outline-none focus:border-primary cursor-pointer w-full sm:w-auto"
+            className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl px-3 py-2 sm:py-1.5 text-xs text-neutral-700 dark:text-neutral-200 focus:outline-none focus:border-primary cursor-pointer w-full sm:w-auto"
           >
             <option value={10}>10 รายการ/หน้า</option>
             <option value={20}>20 รายการ/หน้า</option>
@@ -87,7 +87,7 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
       {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-neutral-50 text-neutral-600 border-b border-neutral-200">
+          <thead className="bg-neutral-50 dark:bg-neutral-900/60 text-neutral-600 dark:text-neutral-300 border-b border-neutral-200 dark:border-neutral-700">
             <tr>
               <th className="px-4 py-3 text-left w-12">#</th>
               <th className="px-4 py-3 text-left">ชื่อกิจกรรม</th>
@@ -99,7 +99,7 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
               <th className="px-4 py-3 text-center">จัดการ</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-neutral-100">
+          <tbody className="divide-y divide-neutral-100 dark:divide-neutral-700">
             {paginatedEvents.length > 0 ? (
               paginatedEvents.map((ev, idx) => {
                 const summary = participantsMap[ev.event_id]
@@ -108,9 +108,9 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
                 const globalIndex = startRecord + idx
 
                 return (
-                  <tr key={ev.event_id} className="hover:bg-neutral-50/80 transition-colors">
-                    <td className="px-4 py-3.5 text-neutral-400 font-medium">{globalIndex}</td>
-                    <td className="px-4 py-3.5 font-medium text-neutral-800 max-w-xs truncate" title={ev.event_title}>
+                  <tr key={ev.event_id} className="hover:bg-neutral-50/80 dark:hover:bg-neutral-700/40 transition-colors">
+                    <td className="px-4 py-3.5 text-neutral-400 dark:text-neutral-500 font-medium">{globalIndex}</td>
+                    <td className="px-4 py-3.5 font-medium text-neutral-800 dark:text-neutral-100 max-w-xs truncate" title={ev.event_title}>
                       {ev.event_title}
                     </td>
                     <td className="px-4 py-3.5">
@@ -118,21 +118,21 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
                         {ev.event_type || 'อื่นๆ'}
                       </span>
                     </td>
-                    <td className="px-4 py-3.5 text-neutral-700 whitespace-nowrap font-medium text-xs sm:text-sm">
+                    <td className="px-4 py-3.5 text-neutral-700 dark:text-neutral-300 whitespace-nowrap font-medium text-xs sm:text-sm">
                       {formatDateShort(ev.event_date) || '-'}
                     </td>
-                    <td className="px-4 py-3.5 text-neutral-600 whitespace-nowrap text-xs">
+                    <td className="px-4 py-3.5 text-neutral-600 dark:text-neutral-400 whitespace-nowrap text-xs">
                       {formatTime(ev.event_time_start)} - {formatTime(ev.event_time_stop)}
                     </td>
-                    <td className="px-4 py-3.5 text-neutral-600 text-xs sm:text-sm">{ev.event_addr || '-'}</td>
-                    <td className="px-4 py-3.5 text-center font-bold text-neutral-800">
+                    <td className="px-4 py-3.5 text-neutral-600 dark:text-neutral-400 text-xs sm:text-sm">{ev.event_addr || '-'}</td>
+                    <td className="px-4 py-3.5 text-center font-bold text-neutral-800 dark:text-neutral-100">
                       {summary ? summary.total : '-'}
                     </td>
                     <td className="px-4 py-3.5">
                       <div className="flex items-center justify-center gap-1.5">
                         <button
                           onClick={() => onViewParticipants(ev.event_id)}
-                          className="p-1.5 rounded-lg hover:bg-primary-light text-primary transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg hover:bg-primary-light dark:hover:bg-primary/20 text-primary dark:text-primary-light transition-colors cursor-pointer"
                           title="ดูรายชื่อผู้เข้าร่วม"
                         >
                           <Eye className="w-4 h-4" />
@@ -142,7 +142,7 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
                             href={`${pdfBaseUrl}/pdf/${ev.pdf_file}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-1.5 rounded-lg hover:bg-blue-50 text-blue-600 transition-colors cursor-pointer"
+                            className="p-1.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/40 text-blue-600 dark:text-blue-400 transition-colors cursor-pointer"
                             title="ดาวน์โหลด PDF"
                           >
                             <Download className="w-4 h-4" />
@@ -150,14 +150,14 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
                         )}
                         <button
                           onClick={() => onViewQR(ev)}
-                          className="p-1.5 rounded-lg hover:bg-yellow-50 text-yellow-600 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg hover:bg-yellow-50 dark:hover:bg-yellow-950/40 text-yellow-600 dark:text-yellow-400 transition-colors cursor-pointer"
                           title="ดู QR Code"
                         >
                           <QrCode className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => onGoLive(ev.event_id)}
-                          className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/40 text-red-500 transition-colors cursor-pointer"
                           title="เปิดหน้า Live Check-in"
                         >
                           <Radio className="w-4 h-4" />
@@ -169,7 +169,7 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
               })
             ) : (
               <tr>
-                <td colSpan={8} className="px-4 py-8 text-center text-neutral-400 text-sm">
+                <td colSpan={8} className="px-4 py-8 text-center text-neutral-400 dark:text-neutral-500 text-sm">
                   ไม่พบกิจกรรมที่ตรงกับการค้นหา "{searchTerm}"
                 </td>
               </tr>
@@ -180,7 +180,7 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
 
       {/* Pagination Footer */}
       {totalItems > 0 && (
-        <div className="px-6 py-3 border-t border-neutral-200 bg-neutral-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-neutral-500">
+        <div className="px-6 py-3 border-t border-neutral-200 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-neutral-500 dark:text-neutral-400">
           <div>
             แสดง {startRecord} - {endRecord} จากทั้งหมด {totalItems} รายการ
           </div>
@@ -189,20 +189,20 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={safeCurrentPage <= 1}
-              className="p-1.5 rounded-lg border border-neutral-200 bg-white hover:bg-neutral-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="p-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
               title="หน้าก่อนหน้า"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
 
-            <span className="px-2 font-medium text-neutral-700">
+            <span className="px-2 font-medium text-neutral-700 dark:text-neutral-200">
               หน้า {safeCurrentPage} / {totalPages}
             </span>
 
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={safeCurrentPage >= totalPages}
-              className="p-1.5 rounded-lg border border-neutral-200 bg-white hover:bg-neutral-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="p-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
               title="หน้าถัดไป"
             >
               <ChevronRight className="w-4 h-4" />

@@ -1,8 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
-import { ScanFace, LayoutDashboard, Radio } from "lucide-react";
+import { ScanFace, LayoutDashboard, Radio, Sun, Moon } from "lucide-react";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function Navbar() {
   const location = useLocation();
+  const { isDark, toggleTheme } = useTheme();
 
   const isActive = (path) => location.pathname.startsWith(path);
 
@@ -15,7 +17,7 @@ export default function Navbar() {
             className="flex items-center gap-2 font-bold text-base sm:text-xl shrink-0"
           >
             <ScanFace className="w-6 h-6 sm:w-7 h-7" />
-            <span className="hidden sm:inline">Dashboard Scan Attendance</span>
+            <span className="hidden sm:inline">ระบบแดชบอร์ด Face Scan</span>
             <span className="sm:hidden font-bold">Face Scan</span>
           </Link>
           <div className="flex items-center gap-1 sm:gap-1.5">
@@ -28,7 +30,7 @@ export default function Navbar() {
               }`}
             >
               <LayoutDashboard className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-              <span>Dashboard</span>
+              <span>แดชบอร์ด</span>
             </Link>
             <Link
               to="/live"
@@ -41,6 +43,17 @@ export default function Navbar() {
               <Radio className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               <span>Live Check-in</span>
             </Link>
+            <button
+              onClick={toggleTheme}
+              className="p-1.5 sm:p-2 rounded-xl hover:bg-white/10 text-white transition-colors cursor-pointer ml-0.5 sm:ml-1"
+              title={isDark ? "เปลี่ยนเป็นธีมสว่าง (Light Mode)" : "เปลี่ยนเป็นธีมมืด (Dark Mode)"}
+            >
+              {isDark ? (
+                <Sun className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-yellow-300" />
+              ) : (
+                <Moon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+              )}
+            </button>
           </div>
         </div>
       </div>
