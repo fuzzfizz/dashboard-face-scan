@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Eye, Download, QrCode, Radio, Search, ChevronLeft, ChevronRight } from 'lucide-react'
-import { formatTime } from '../../utils/helpers'
+import { formatDateShort, formatTime } from '../../utils/helpers'
 
 export default function EventTable({ events = [], participantsMap = {}, onViewParticipants, onViewQR, onGoLive }) {
   const [searchTerm, setSearchTerm] = useState('')
@@ -15,7 +15,8 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
       (ev) =>
         ev.event_title?.toLowerCase().includes(query) ||
         ev.event_addr?.toLowerCase().includes(query) ||
-        ev.event_type?.toLowerCase().includes(query)
+        ev.event_type?.toLowerCase().includes(query) ||
+        ev.event_date?.toLowerCase().includes(query)
     )
   }, [events, searchTerm])
 
@@ -57,7 +58,7 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
             <Search className="w-4 h-4 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="ค้นหากิจกรรม, สถานที่..."
+              placeholder="ค้นหากิจกรรม, วันที่, สถานที่..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value)
@@ -91,8 +92,9 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
               <th className="px-4 py-3 text-left w-12">#</th>
               <th className="px-4 py-3 text-left">ชื่อกิจกรรม</th>
               <th className="px-4 py-3 text-left">ประเภท</th>
-              <th className="px-4 py-3 text-left">สถานที่</th>
+              <th className="px-4 py-3 text-left">วันที่</th>
               <th className="px-4 py-3 text-left">เวลา</th>
+              <th className="px-4 py-3 text-left">สถานที่</th>
               <th className="px-4 py-3 text-center">ผู้เข้าร่วม</th>
               <th className="px-4 py-3 text-center">จัดการ</th>
             </tr>
@@ -116,10 +118,13 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
                         {ev.event_type || 'อื่นๆ'}
                       </span>
                     </td>
-                    <td className="px-4 py-3.5 text-neutral-600">{ev.event_addr || '-'}</td>
-                    <td className="px-4 py-3.5 text-neutral-600 whitespace-nowrap">
+                    <td className="px-4 py-3.5 text-neutral-700 whitespace-nowrap font-medium text-xs sm:text-sm">
+                      {formatDateShort(ev.event_date) || '-'}
+                    </td>
+                    <td className="px-4 py-3.5 text-neutral-600 whitespace-nowrap text-xs">
                       {formatTime(ev.event_time_start)} - {formatTime(ev.event_time_stop)}
                     </td>
+                    <td className="px-4 py-3.5 text-neutral-600 text-xs sm:text-sm">{ev.event_addr || '-'}</td>
                     <td className="px-4 py-3.5 text-center font-bold text-neutral-800">
                       {summary ? summary.total : '-'}
                     </td>
@@ -164,7 +169,7 @@ export default function EventTable({ events = [], participantsMap = {}, onViewPa
               })
             ) : (
               <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-neutral-400 text-sm">
+                <td colSpan={8} className="px-4 py-8 text-center text-neutral-400 text-sm">
                   ไม่พบกิจกรรมที่ตรงกับการค้นหา "{searchTerm}"
                 </td>
               </tr>
