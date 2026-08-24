@@ -1,0 +1,11 @@
+services:
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        API_BASE_URL: https://api.pharmacy.cmu.ac.th/smart_pharmacy/EventCheck-in/api
+    container_name: face-scan-dashboard
+    restart: always
+    ports:
+      - "80:80"

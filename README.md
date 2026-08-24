@@ -75,6 +75,25 @@ npm run build
 
 ---
 
+## 🐳 การรันด้วย Docker (Docker Deployment)
+
+### ใช้ Docker Compose (แนะนำ — รันคำสั่งเดียว):
+```bash
+docker compose up -d --build
+```
+> เปิดเบราว์เซอร์ไปที่ `http://localhost` หรือ `http://<IP_เครื่อง_VM>`
+
+### หรือใช้ Docker CLI:
+```bash
+# Build Image
+docker build -t face-scan-dashboard .
+
+# Run Container
+docker run -d --name face-scan -p 80:80 --restart always face-scan-dashboard
+```
+
+---
+
 ## 📁 โครงสร้างโปรเจกต์ (Project Structure)
 
 ```text
