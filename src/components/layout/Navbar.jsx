@@ -10,42 +10,50 @@ export default function Navbar() {
 
   return (
     <nav className="bg-primary text-white shadow-lg sticky top-0 z-40">
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14 sm:h-16">
+      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-13 sm:h-16 gap-2">
+          {/* Logo / Brand Title */}
           <Link
             to="/dashboard"
-            className="flex items-center gap-2 font-bold text-base sm:text-xl shrink-0"
+            className="flex items-center gap-1.5 sm:gap-2 font-bold text-sm sm:text-base md:text-xl shrink-0 min-w-0"
           >
-            <ScanFace className="w-6 h-6 sm:w-7 h-7" />
-            <span className="hidden sm:inline">Dashboard Face Attendance</span>
-            <span className="sm:hidden font-bold">Face Scan</span>
+            <ScanFace className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 shrink-0" />
+            <span className="hidden md:inline truncate">Dashboard Face Attendance</span>
+            <span className="hidden sm:inline md:hidden truncate">Face Attendance</span>
+            <span className="sm:hidden font-bold truncate text-xs sm:text-sm">Face Scan</span>
           </Link>
-          <div className="flex items-center gap-1 sm:gap-1.5">
+
+          {/* Navigation Action Buttons */}
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             <Link
               to="/dashboard"
-              className={`flex items-center gap-1.5 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium transition-colors ${
+              className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium transition-all active:scale-95 ${
                 isActive("/dashboard")
-                  ? "bg-white/20 font-semibold"
-                  : "hover:bg-white/10"
+                  ? "bg-white/20 font-semibold shadow-xs"
+                  : "hover:bg-white/10 text-white/90"
               }`}
             >
-              <LayoutDashboard className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <LayoutDashboard className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
               <span>Dashboard</span>
             </Link>
+
             <Link
               to="/live"
-              className={`flex items-center gap-1.5 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium transition-colors ${
+              className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium transition-all active:scale-95 ${
                 isActive("/live")
-                  ? "bg-white/20 font-semibold"
-                  : "hover:bg-white/10"
+                  ? "bg-white/20 font-semibold shadow-xs"
+                  : "hover:bg-white/10 text-white/90"
               }`}
             >
-              <Radio className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-              <span>Live Check-in</span>
+              <Radio className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <span>
+                Live<span className="hidden sm:inline"> Check-in</span>
+              </span>
             </Link>
+
             <button
               onClick={toggleTheme}
-              className="p-1.5 sm:p-2 rounded-xl hover:bg-white/10 text-white transition-colors cursor-pointer ml-0.5 sm:ml-1"
+              className="p-1.5 sm:p-2 rounded-xl hover:bg-white/10 active:scale-95 text-white transition-all cursor-pointer"
               title={isDark ? "ธีมมืด (คลิกเพื่อเปลี่ยนเป็นธีมสว่าง)" : "ธีมสว่าง (คลิกเพื่อเปลี่ยนเป็นธีมมืด)"}
             >
               {isDark ? (
