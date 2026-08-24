@@ -10,8 +10,8 @@ RUN npm ci
 # Copy source files
 COPY . .
 
-# Build argument for API URL (default to Pharmacy CMU API)
-ARG API_BASE_URL=https://api.pharmacy.cmu.ac.th/smart_pharmacy/EventCheck-in/api
+# Build argument for API URL (default to /api reverse proxy)
+ARG API_BASE_URL=/api
 ENV API_BASE_URL=$API_BASE_URL
 
 # Build production bundle

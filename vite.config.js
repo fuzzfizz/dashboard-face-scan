@@ -8,4 +8,18 @@ export default defineConfig({
     tailwindcss(),
   ],
   envPrefix: 'API_',
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://api.pharmacy.cmu.ac.th/smart_pharmacy/EventCheck-in/api',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+      '/pdf': {
+        target: 'https://api.pharmacy.cmu.ac.th/smart_pharmacy/EventCheck-in/pdf',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/pdf/, ''),
+      },
+    },
+  },
 })
