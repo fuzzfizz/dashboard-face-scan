@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react'
-import { getInitial } from '../../utils/helpers'
+import { useState, useMemo, useEffect, useRef } from 'react'
+import { getInitial, getToday } from '../../utils/helpers'
 import { Sparkles, Users } from 'lucide-react'
 
 const typeDot = {
@@ -10,6 +10,9 @@ const typeDot = {
 
 export default function ParticipantGrid({ participants = [], selectedId, onSelect }) {
   const [filterType, setFilterType] = useState('all')
+  const [highlightedId, setHighlightedId] = useState(null)
+  const prevLatestIdRef = useRef(null)
+  const today = getToday()
 
   const sorted = useMemo(() => {
     return [...participants].sort(
@@ -17,12 +20,32 @@ export default function ParticipantGrid({ participants = [], selectedId, onSelec
     )
   }, [participants])
 
+  const latestParticipant = sorted[0]
+  const isLatestFromToday = latestParticipant?.regis_date
+    ? latestParticipant.regis_date.startsWith(today)
+    : false
+
+  // Trigger 3-second highlight only for today's new scans
+  useEffect(() => {
+    if (!latestParticipant) return
+    const currentId = latestParticipant.regis_id
+
+    if (isLatestFromToday && currentId && currentId !== prevLatestIdRef.current) {
+      prevLatestIdRef.current = currentId
+      setHighlightedId(currentId)
+
+      const timer = setTimeout(() => {
+        setHighlightedId(null)
+      }, 3000)
+
+      return () => clearTimeout(timer)
+    }
+  }, [latestParticipant, isLatestFromToday])
+
   const filtered = useMemo(() => {
     if (filterType === 'all') return sorted
     return sorted.filter((p) => (p.user_type || 'guest').toLowerCase() === filterType)
   }, [sorted, filterType])
-
-  const latestId = sorted[0]?.regis_id
 
   return (
     <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
@@ -98,7 +121,7 @@ export default function ParticipantGrid({ participants = [], selectedId, onSelec
             <tbody className="divide-y divide-neutral-100">
               {filtered.map((p) => {
                 const isSelected = p.regis_id === selectedId
-                const isLatest = p.regis_id === latestId
+                const isHighlighted = p.regis_id === highlightedId
                 const time = p.regis_date
                   ? new Date(p.regis_date).toLocaleTimeString('th-TH', {
                       hour: '2-digit',
@@ -111,11 +134,11 @@ export default function ParticipantGrid({ participants = [], selectedId, onSelec
                   <tr
                     key={p.regis_id}
                     onClick={() => onSelect(p)}
-                    className={`cursor-pointer transition-all ${
+                    className={`cursor-pointer transition-all duration-300 ${
                       isSelected
                         ? 'bg-primary-light/90 border-l-4 border-primary'
-                        : isLatest
-                        ? 'bg-green-50/70 border-l-4 border-primary/70 animate-glow'
+                        : isHighlighted
+                        ? 'bg-green-50/90 border-l-4 border-primary shadow-xs animate-glow'
                         : 'hover:bg-neutral-50'
                     }`}
                   >
@@ -125,7 +148,7 @@ export default function ParticipantGrid({ participants = [], selectedId, onSelec
                           <img
                             src={p.participant_photo}
                             alt={p.participant_name}
-                            className="w-9 h-9 rounded-full object-cover shadow-xs"
+                            className={`w-9 h-9 rounded-full object-cover shadow-xs transition-transform ${isHighlighted ? 'scale-105 ring-2 ring-primary/40' : ''}`}
                             onError={(e) => {
                               e.target.style.display = 'none'
                               e.target.nextSibling.style.display = 'flex'
@@ -145,8 +168,8 @@ export default function ParticipantGrid({ participants = [], selectedId, onSelec
                     <td className="px-3 py-2.5 font-medium text-neutral-800">
                       <div className="flex items-center gap-1.5">
                         <span className="truncate">{p.participant_name}</span>
-                        {isLatest && (
-                          <span className="px-1.5 py-0.2 text-[10px] font-bold bg-primary text-white rounded-full flex items-center gap-0.5 shrink-0 shadow-xs">
+                        {isHighlighted && (
+                          <span className="px-1.5 py-0.2 text-[10px] font-bold bg-primary text-white rounded-full flex items-center gap-0.5 shrink-0 shadow-xs animate-bounce">
                             <Sparkles className="w-2.5 h-2.5" /> ล่าสุด
                           </span>
                         )}
