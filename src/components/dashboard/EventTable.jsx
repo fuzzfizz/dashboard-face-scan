@@ -31,7 +31,7 @@ export default function EventTable({ events, participantsMap, onViewParticipants
           <tbody className="divide-y divide-neutral-100">
             {events.map((ev, idx) => {
               const summary = participantsMap[ev.event_id]
-              const apiBase = import.meta.env.API_BASE_URL || import.meta.env.VITE_API_BASE_URL || 'https://api.pharmacy.cmu.ac.th/smart_pharmacy/EventCheck-in/api'
+              const apiBase = import.meta.env.API_BASE_URL || 'https://api.pharmacy.cmu.ac.th/smart_pharmacy/EventCheck-in/api'
               const pdfBaseUrl = apiBase.replace('/api', '')
               return (
                 <tr key={ev.event_id} className="hover:bg-neutral-50 transition-colors">
