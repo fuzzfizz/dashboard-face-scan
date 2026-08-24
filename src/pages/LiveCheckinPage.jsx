@@ -124,12 +124,12 @@ export default function LiveCheckinPage() {
             <button
               onClick={toggleTheme}
               className="p-1.5 rounded-lg hover:bg-white/10 text-white transition-colors cursor-pointer"
-              title={isDark ? "เปลี่ยนเป็นธีมสว่าง (Light Mode)" : "เปลี่ยนเป็นธีมมืด (Dark Mode)"}
+              title={isDark ? "ธีมมืด (คลิกเพื่อเปลี่ยนเป็นธีมสว่าง)" : "ธีมสว่าง (คลิกเพื่อเปลี่ยนเป็นธีมมืด)"}
             >
               {isDark ? (
-                <Sun className="w-4 h-4 text-yellow-300" />
+                <Moon className="w-4 h-4 text-slate-200" />
               ) : (
-                <Moon className="w-4 h-4" />
+                <Sun className="w-4 h-4 text-yellow-300" />
               )}
             </button>
             <button
@@ -328,12 +328,12 @@ export default function LiveCheckinPage() {
           <button
             onClick={toggleTheme}
             className="p-1.5 sm:p-2 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
-            title={isDark ? "เปลี่ยนเป็นธีมสว่าง (Light Mode)" : "เปลี่ยนเป็นธีมมืด (Dark Mode)"}
+            title={isDark ? "ธีมมืด (คลิกเพื่อเปลี่ยนเป็นธีมสว่าง)" : "ธีมสว่าง (คลิกเพื่อเปลี่ยนเป็นธีมมืด)"}
           >
             {isDark ? (
-              <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-300" />
+              <Moon className="w-4 h-4 sm:w-5 sm:h-5 text-slate-200" />
             ) : (
-              <Moon className="w-4 h-4 sm:w-5 sm:h-5" />
+              <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-300" />
             )}
           </button>
           <button

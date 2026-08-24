@@ -46,12 +46,12 @@ export default function Navbar() {
             <button
               onClick={toggleTheme}
               className="p-1.5 sm:p-2 rounded-xl hover:bg-white/10 text-white transition-colors cursor-pointer ml-0.5 sm:ml-1"
-              title={isDark ? "เปลี่ยนเป็นธีมสว่าง (Light Mode)" : "เปลี่ยนเป็นธีมมืด (Dark Mode)"}
+              title={isDark ? "ธีมมืด (คลิกเพื่อเปลี่ยนเป็นธีมสว่าง)" : "ธีมสว่าง (คลิกเพื่อเปลี่ยนเป็นธีมมืด)"}
             >
               {isDark ? (
-                <Sun className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-yellow-300" />
+                <Moon className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-slate-200" />
               ) : (
-                <Moon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                <Sun className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-yellow-300" />
               )}
             </button>
           </div>
