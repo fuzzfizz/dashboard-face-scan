@@ -22,15 +22,31 @@ import { RefreshCw, Calendar, ArrowRight, Clock } from 'lucide-react'
 export default function DashboardPage() {
   const navigate = useNavigate()
   const today = getToday()
-  const [startDate, setStartDate] = useState(today)
-  const [endDate, setEndDate] = useState(today)
-  const [activePreset, setActivePreset] = useState('today')
+
+  // Initialize from sessionStorage to preserve filters when navigating back from Live page
+  const [startDate, setStartDate] = useState(() => {
+    return sessionStorage.getItem('dashboard_start_date') || today
+  })
+  const [endDate, setEndDate] = useState(() => {
+    return sessionStorage.getItem('dashboard_end_date') || today
+  })
+  const [activePreset, setActivePreset] = useState(() => {
+    return sessionStorage.getItem('dashboard_preset') || 'today'
+  })
+
   const { events, count, loading: eventsLoading, error, refetch } = useEvents(startDate, endDate)
 
   const [participantsMap, setParticipantsMap] = useState({})
   const [summaryLoading, setSummaryLoading] = useState(false)
   const [selectedEventId, setSelectedEventId] = useState(null)
   const [qrEvent, setQrEvent] = useState(null)
+
+  // Save active filter state to sessionStorage
+  useEffect(() => {
+    sessionStorage.setItem('dashboard_start_date', startDate)
+    sessionStorage.setItem('dashboard_end_date', endDate)
+    sessionStorage.setItem('dashboard_preset', activePreset)
+  }, [startDate, endDate, activePreset])
 
   const isToday = startDate === today && endDate === today
 

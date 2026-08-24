@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useParticipants } from '../hooks/useParticipants'
 import { useEvents } from '../hooks/useEvents'
 import { useAutoRefresh } from '../hooks/useAutoRefresh'
@@ -10,9 +10,18 @@ import { formatDate, formatTime, getToday } from '../utils/helpers'
 import { RefreshCw, ArrowLeft, ScanFace, Radio, Calendar } from 'lucide-react'
 
 export default function LiveCheckinPage() {
+  const navigate = useNavigate()
   const { eventId } = useParams()
   const isNoEventSelected = !eventId || eventId === '0'
   const today = getToday()
+
+  const handleBack = () => {
+    if (window.history.state && window.history.state.idx > 0) {
+      navigate(-1)
+    } else {
+      navigate('/dashboard')
+    }
+  }
 
   const {
     events: todayEvents,
@@ -50,9 +59,13 @@ export default function LiveCheckinPage() {
         {/* Header */}
         <header className="bg-primary text-white px-6 py-3 flex items-center justify-between shadow-lg">
           <div className="flex items-center gap-4">
-            <Link to="/dashboard" className="p-1.5 rounded-lg hover:bg-white/10 transition-colors">
+            <button
+              onClick={handleBack}
+              className="p-1.5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+              title="ย้อนกลับ"
+            >
               <ArrowLeft className="w-5 h-5" />
-            </Link>
+            </button>
             <div className="flex items-center gap-2">
               <ScanFace className="w-6 h-6" />
               <div>
@@ -61,12 +74,12 @@ export default function LiveCheckinPage() {
               </div>
             </div>
           </div>
-          <Link
-            to="/dashboard"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-medium transition-colors"
+          <button
+            onClick={handleBack}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-medium transition-colors cursor-pointer"
           >
             กลับหน้าแดชบอร์ด
-          </Link>
+          </button>
         </header>
 
         {/* Event Selector Body */}
@@ -171,12 +184,12 @@ export default function LiveCheckinPage() {
             >
               ลองใหม่อีกครั้ง
             </button>
-            <Link
-              to="/dashboard"
-              className="px-4 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white text-sm font-medium transition-colors"
+            <button
+              onClick={handleBack}
+              className="px-4 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white text-sm font-medium transition-colors cursor-pointer"
             >
               กลับหน้าแดชบอร์ด
-            </Link>
+            </button>
           </div>
         </div>
       </div>
@@ -188,9 +201,13 @@ export default function LiveCheckinPage() {
       {/* Header */}
       <header className="bg-primary text-white px-6 py-3 flex items-center justify-between shadow-lg">
         <div className="flex items-center gap-4">
-          <Link to="/dashboard" className="p-1.5 rounded-lg hover:bg-white/10 transition-colors">
+          <button
+            onClick={handleBack}
+            className="p-1.5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+            title="ย้อนกลับไปหน้าแดชบอร์ด"
+          >
             <ArrowLeft className="w-5 h-5" />
-          </Link>
+          </button>
           <div className="flex items-center gap-2">
             <ScanFace className="w-6 h-6" />
             <div>
