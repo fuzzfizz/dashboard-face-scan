@@ -14,3 +14,16 @@ html {
   scroll-behavior: smooth;
 }
 
+@keyframes glow-pulse {
+  0%, 100% {
+    background-color: rgba(232, 245, 217, 0.85);
+  }
+  50% {
+    background-color: rgba(232, 245, 217, 0.25);
+  }
+}
+
+.animate-glow {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+

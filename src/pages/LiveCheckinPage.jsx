@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useParticipants } from '../hooks/useParticipants'
 import { useEvents } from '../hooks/useEvents'
@@ -7,13 +7,56 @@ import PhotoDisplay from '../components/live/PhotoDisplay'
 import ParticipantGrid from '../components/live/ParticipantGrid'
 import SummaryBar from '../components/live/SummaryBar'
 import { formatDate, formatTime, getToday } from '../utils/helpers'
-import { RefreshCw, ArrowLeft, ScanFace, Radio, Calendar } from 'lucide-react'
+import {
+  RefreshCw,
+  ArrowLeft,
+  ScanFace,
+  Radio,
+  Calendar,
+  Maximize,
+  Minimize,
+  Wifi,
+  WifiOff,
+} from 'lucide-react'
 
 export default function LiveCheckinPage() {
   const navigate = useNavigate()
   const { eventId } = useParams()
   const isNoEventSelected = !eventId || eventId === '0'
   const today = getToday()
+
+  // Fullscreen state & toggle
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange)
+  }, [])
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(console.error)
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(console.error)
+      }
+    }
+  }
+
+  // Network online/offline status
+  const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true)
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true)
+    const handleOffline = () => setIsOnline(false)
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
+    return () => {
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
+    }
+  }, [])
 
   const handleBack = () => {
     if (window.history.state && window.history.state.idx > 0) {
@@ -221,13 +264,20 @@ export default function LiveCheckinPage() {
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <button
             onClick={handleRefresh}
             className="p-1.5 sm:p-2 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
             title="รีเฟรช"
           >
             <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 ${loading ? 'animate-spin' : ''}`} />
+          </button>
+          <button
+            onClick={toggleFullscreen}
+            className="p-1.5 sm:p-2 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+            title={isFullscreen ? 'ออกจากโหมดเต็มจอ' : 'แสดงผลเต็มจอ (Fullscreen)'}
+          >
+            {isFullscreen ? <Minimize className="w-4 h-4 sm:w-5 sm:h-5" /> : <Maximize className="w-4 h-4 sm:w-5 sm:h-5" />}
           </button>
           <button
             onClick={toggle}
@@ -249,12 +299,6 @@ export default function LiveCheckinPage() {
 
         {/* Right / Bottom Panel — Grid + Summary */}
         <div className="w-full lg:w-3/5 flex-1 min-h-0 flex flex-col bg-neutral-50">
-          <div className="px-4 py-2.5 sm:py-3 bg-white border-b border-neutral-200 flex items-center justify-between shrink-0">
-            <h3 className="font-semibold text-xs sm:text-sm text-neutral-800">รายชื่อผู้ Check-in</h3>
-            <span className="text-[11px] sm:text-xs text-neutral-400">
-              {participants.length} คน
-            </span>
-          </div>
           <ParticipantGrid
             participants={participants}
             selectedId={displayParticipant?.regis_id}
@@ -264,10 +308,33 @@ export default function LiveCheckinPage() {
         </div>
       </div>
 
-      {/* Footer Status */}
+      {/* Footer Status with Network Health */}
       <footer className="bg-white border-t border-neutral-200 px-4 sm:px-6 py-1.5 sm:py-2 flex items-center justify-between text-[11px] sm:text-xs text-neutral-500 shrink-0">
-        <span className="truncate">สแกนล่าสุด: {lastScanTime}</span>
-        <span className="shrink-0 ml-2">Auto-refresh: {isActive ? `ON (5s)` : 'OFF'}</span>
+        <div className="flex items-center gap-3">
+          <span className="truncate">สแกนล่าสุด: {lastScanTime}</span>
+          <span className="text-neutral-300 hidden sm:inline">•</span>
+          <span className="hidden sm:inline">Auto-refresh: {isActive ? `ON (5s)` : 'OFF'}</span>
+        </div>
+
+        {/* Connection Health Indicator */}
+        <div className="flex items-center gap-1.5">
+          {!isOnline ? (
+            <span className="flex items-center gap-1 text-red-600 font-medium">
+              <WifiOff className="w-3.5 h-3.5" />
+              <span>ออฟไลน์</span>
+            </span>
+          ) : error ? (
+            <span className="flex items-center gap-1 text-yellow-600 font-medium">
+              <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+              <span>กำลังลองเชื่อมต่อใหม่...</span>
+            </span>
+          ) : (
+            <span className="flex items-center gap-1.5 text-green-700">
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+              <span>เชื่อมต่อปกติ</span>
+            </span>
+          )}
+        </div>
       </footer>
     </div>
   )

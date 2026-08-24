@@ -18,20 +18,27 @@ const typeThai = {
 export default function ParticipantsModal({ eventId, onClose }) {
   const { event, summary, participants, loading, error } = useParticipants(eventId)
   const [searchTerm, setSearchTerm] = useState('')
+  const [selectedType, setSelectedType] = useState('all')
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(15)
 
-  // Filter participants based on search query
+  // Filter participants based on search query and selected user_type
   const filteredParticipants = useMemo(() => {
-    if (!searchTerm.trim()) return participants
-    const query = searchTerm.toLowerCase().trim()
-    return participants.filter(
-      (p) =>
-        p.participant_name?.toLowerCase().includes(query) ||
-        p.user_department?.toLowerCase().includes(query) ||
-        p.user_type?.toLowerCase().includes(query)
-    )
-  }, [participants, searchTerm])
+    let list = participants
+    if (selectedType !== 'all') {
+      list = list.filter((p) => (p.user_type || 'guest').toLowerCase() === selectedType)
+    }
+    if (searchTerm.trim()) {
+      const query = searchTerm.toLowerCase().trim()
+      list = list.filter(
+        (p) =>
+          p.participant_name?.toLowerCase().includes(query) ||
+          p.user_department?.toLowerCase().includes(query) ||
+          p.user_type?.toLowerCase().includes(query)
+      )
+    }
+    return list
+  }, [participants, selectedType, searchTerm])
 
   // Pagination calculation
   const totalItems = filteredParticipants.length
@@ -45,6 +52,11 @@ export default function ParticipantsModal({ eventId, onClose }) {
 
   const startRecord = totalItems === 0 ? 0 : (safeCurrentPage - 1) * pageSize + 1
   const endRecord = Math.min(safeCurrentPage * pageSize, totalItems)
+
+  const handleTypeSelect = (type) => {
+    setSelectedType(type)
+    setCurrentPage(1)
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-2 sm:p-4" onClick={onClose}>
@@ -72,20 +84,63 @@ export default function ParticipantsModal({ eventId, onClose }) {
           </button>
         </div>
 
-        {/* Summary Bar */}
-        <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-6 px-4 sm:px-6 py-2 sm:py-2.5 bg-neutral-50 border-b border-neutral-200 text-xs">
-          <span className="flex items-center gap-1.5 text-neutral-700">
-            <Users className="w-4 h-4 text-neutral-500 shrink-0" /> ทั้งหมด: <b>{summary.total}</b> คน
-          </span>
-          <span className="flex items-center gap-1.5 text-green-700">
-            <UserCheck className="w-4 h-4 shrink-0" /> Staff: <b>{summary.staff}</b> คน
-          </span>
-          <span className="flex items-center gap-1.5 text-blue-700">
-            <GraduationCap className="w-4 h-4 shrink-0" /> Student: <b>{summary.student}</b> คน
-          </span>
-          <span className="flex items-center gap-1.5 text-yellow-700">
-            <UserPlus className="w-4 h-4 shrink-0" /> Guest: <b>{summary.guest}</b> คน
-          </span>
+        {/* Interactive Summary & Filter Tabs */}
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2 sm:py-2.5 bg-neutral-50 border-b border-neutral-200 text-xs">
+          <button
+            onClick={() => handleTypeSelect('all')}
+            className={`flex items-center justify-between sm:justify-start gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
+              selectedType === 'all'
+                ? 'bg-white shadow-xs border border-neutral-300 text-neutral-900 font-semibold ring-2 ring-primary/20'
+                : 'text-neutral-600 hover:bg-white/80'
+            }`}
+          >
+            <span className="flex items-center gap-1.5">
+              <Users className="w-3.5 h-3.5 text-neutral-500 shrink-0" /> ทั้งหมด:
+            </span>
+            <b>{summary.total}</b>
+          </button>
+
+          <button
+            onClick={() => handleTypeSelect('staff')}
+            className={`flex items-center justify-between sm:justify-start gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
+              selectedType === 'staff'
+                ? 'bg-green-50 shadow-xs border border-green-300 text-green-800 font-semibold ring-2 ring-green-500/20'
+                : 'text-green-700 hover:bg-green-50/50'
+            }`}
+          >
+            <span className="flex items-center gap-1.5">
+              <UserCheck className="w-3.5 h-3.5 shrink-0" /> Staff:
+            </span>
+            <b>{summary.staff}</b>
+          </button>
+
+          <button
+            onClick={() => handleTypeSelect('student')}
+            className={`flex items-center justify-between sm:justify-start gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
+              selectedType === 'student'
+                ? 'bg-blue-50 shadow-xs border border-blue-300 text-blue-800 font-semibold ring-2 ring-blue-500/20'
+                : 'text-blue-700 hover:bg-blue-50/50'
+            }`}
+          >
+            <span className="flex items-center gap-1.5">
+              <GraduationCap className="w-3.5 h-3.5 shrink-0" /> Student:
+            </span>
+            <b>{summary.student}</b>
+          </button>
+
+          <button
+            onClick={() => handleTypeSelect('guest')}
+            className={`flex items-center justify-between sm:justify-start gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
+              selectedType === 'guest'
+                ? 'bg-yellow-50 shadow-xs border border-yellow-300 text-yellow-800 font-semibold ring-2 ring-yellow-500/20'
+                : 'text-yellow-700 hover:bg-yellow-50/50'
+            }`}
+          >
+            <span className="flex items-center gap-1.5">
+              <UserPlus className="w-3.5 h-3.5 shrink-0" /> Guest:
+            </span>
+            <b>{summary.guest}</b>
+          </button>
         </div>
 
         {/* Search & Toolbar */}
@@ -194,6 +249,8 @@ export default function ParticipantsModal({ eventId, onClose }) {
                     <td colSpan={6} className="px-4 py-8 text-center text-neutral-400 text-sm">
                       {searchTerm
                         ? `ไม่พบรายชื่อที่ตรงกับการค้นหา "${searchTerm}"`
+                        : selectedType !== 'all'
+                        ? `ไม่มีผู้เข้าร่วมประเภท ${typeThai[selectedType] || selectedType} ในกิจกรรมนี้`
                         : 'ยังไม่มีรายชื่อผู้เข้าร่วมในกิจกรรมนี้'}
                     </td>
                   </tr>
