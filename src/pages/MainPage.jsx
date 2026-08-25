@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import Header from '../components/layout/Header'
 import DateFilter from '../components/event-list/DateFilter'
-import SummaryCards from '../components/event-list/SummaryCards'
 import EventTable from '../components/event-list/EventTable'
 import LeftPanel from '../components/event-detail/LeftPanel'
 import RightPanel from '../components/event-detail/RightPanel'
@@ -129,16 +128,6 @@ export default function MainPage() {
       .catch(console.error)
       .finally(() => setSummaryLoading(false))
   }, [events])
-
-  const totals = Object.values(participantsMap).reduce(
-    (acc, s) => ({
-      total: acc.total + Number(s?.total || 0),
-      staff: acc.staff + Number(s?.staff || 0),
-      student: acc.student + Number(s?.student || 0),
-      guest: acc.guest + Number(s?.guest || 0),
-    }),
-    { total: 0, staff: 0, student: 0, guest: 0 }
-  )
 
   const listLoading = eventsLoading || summaryLoading
 
@@ -316,17 +305,6 @@ export default function MainPage() {
             {error}
           </div>
         )}
-
-        <SummaryCards
-          data={{
-            eventCount: count,
-            totalParticipants: totals.total,
-            staffCount: totals.staff,
-            otherCount: totals.student + totals.guest,
-          }}
-          loading={listLoading}
-          dateLabel={dateLabel}
-        />
 
         <EventTable
           events={events}
