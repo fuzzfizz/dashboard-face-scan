@@ -29,58 +29,28 @@ export default function MainPage() {
   const enterDetail = (eventId) => {
     setViewTransition('animate-slide-left')
     setSelectedEventId(eventId)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const exitDetail = () => {
     setViewTransition('animate-slide-right')
     setSelectedEventId(null)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // ========== Event List State ==========
-  const [filterMode, setFilterMode] = useState(() => sessionStorage.getItem('dashboard_filter_mode') || 'single')
-  const [startDate, setStartDate] = useState(() => sessionStorage.getItem('dashboard_start_date') || today)
-  const [endDate, setEndDate] = useState(() => sessionStorage.getItem('dashboard_end_date') || today)
-  const [activePreset, setActivePreset] = useState(() => sessionStorage.getItem('dashboard_preset') || 'today')
-  const [participantsMap, setParticipantsMap] = useState({})
-  const [summaryLoading, setSummaryLoading] = useState(false)
-
-  const { events, count, loading: eventsLoading, error, refetch } = useEvents(startDate, endDate)
-
+  // Clear transition class after animation completes
   useEffect(() => {
-    sessionStorage.setItem('dashboard_filter_mode', filterMode)
-    sessionStorage.setItem('dashboard_start_date', startDate)
-    sessionStorage.setItem('dashboard_end_date', endDate)
-    sessionStorage.setItem('dashboard_preset', activePreset)
-  }, [filterMode, startDate, endDate, activePreset])
-
-  const isToday = startDate === today && endDate === today
-
-  const dateLabel = useMemo(() => {
-    if (isToday) return `วันนี้ (${formatDateShort(today)})`
-    if (startDate === endDate) return formatDate(startDate)
-    return `${formatDateShort(startDate)} – ${formatDateShort(endDate)}`
-  }, [isToday, startDate, endDate, today])
-
-  const applyPreset = (preset) => {
-    setActivePreset(preset)
-    if (preset === 'today') {
-      setStartDate(today)
-      setEndDate(today)
-    } else if (preset === 'yesterday') {
-      const y = getDaysAgo(1)
-      setStartDate(y)
-      setEndDate(y)
-    } else if (preset === '7days') {
-      setStartDate(getDaysAgo(6))
-      setEndDate(today)
-    } else if (preset === 'month') {
-      setStartDate(getStartOfMonth())
-      setEndDate(today)
-    } else if (preset === 'year') {
-      setStartDate(getStartOfYear())
-      setEndDate(today)
+    if (viewTransition) {
+      const timer = setTimeout(() => setViewTransition(''), 300)
+      return () => clearTimeout(timer)
     }
-  }
+  }, [viewTransition])
+
+  // ========== Date Filter State (Event List) ==========
+  const [filterMode, setFilterMode] = useState('single') // 'single' | 'range'
+  const [startDate, setStartDate] = useState(today)
+  const [endDate, setEndDate] = useState(today)
+  const [activePreset, setActivePreset] = useState('today')
 
   const handleFilterModeChange = (mode) => {
     setFilterMode(mode)
@@ -103,12 +73,60 @@ export default function MainPage() {
     setActivePreset(value === today ? 'today' : value === getDaysAgo(1) ? 'yesterday' : 'custom')
   }
 
-  const handleStartDateChange = (value) => { setStartDate(value); setActivePreset('custom') }
-  const handleEndDateChange = (value) => { setEndDate(value); setActivePreset('custom') }
+  const handleStartDateChange = (value) => {
+    setStartDate(value)
+    setActivePreset('custom')
+  }
+  const handleEndDateChange = (value) => {
+    setEndDate(value)
+    setActivePreset('custom')
+  }
+
+  const applyPreset = (key) => {
+    setActivePreset(key)
+    if (key === 'today') {
+      setStartDate(today)
+      setEndDate(today)
+    } else if (key === 'yesterday') {
+      const y = getDaysAgo(1)
+      setStartDate(y)
+      setEndDate(y)
+    } else if (key === '7days') {
+      setStartDate(getDaysAgo(6))
+      setEndDate(today)
+    } else if (key === 'month') {
+      setStartDate(getStartOfMonth())
+      setEndDate(today)
+    } else if (key === 'year') {
+      setStartDate(getStartOfYear())
+      setEndDate(today)
+    }
+  }
+
+  const dateLabel = useMemo(() => {
+    if (filterMode === 'single') {
+      if (startDate === today) return 'วันนี้'
+      if (startDate === getDaysAgo(1)) return 'เมื่อวาน'
+      return formatDate(startDate)
+    }
+    if (startDate === endDate) {
+      if (startDate === today) return 'วันนี้'
+      return formatDate(startDate)
+    }
+    return `${formatDateShort(startDate)} - ${formatDateShort(endDate)}`
+  }, [filterMode, startDate, endDate, today])
+
+  // ========== Event List Data ==========
+  const { events, loading: eventsLoading, error, refetch } = useEvents(startDate, endDate)
+  const [participantsMap, setParticipantsMap] = useState({})
+  const [summaryLoading, setSummaryLoading] = useState(false)
 
   // Fetch summaries for all events
   useEffect(() => {
-    if (events.length === 0) { setParticipantsMap({}); return }
+    if (events.length === 0) {
+      setParticipantsMap({})
+      return
+    }
     setSummaryLoading(true)
     Promise.allSettled(events.map((ev) => fetchParticipants(ev.event_id)))
       .then((results) => {
@@ -139,7 +157,7 @@ export default function MainPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const handleDetailRefresh = useCallback(() => { refetchDetail(true) }, [refetchDetail])
-  useAutoRefresh(handleDetailRefresh, 5000, true)
+  const { secondsLeft } = useAutoRefresh(handleDetailRefresh, 5000, true)
 
   // Latest participant vs Selected participant
   const sorted = useMemo(() => {
@@ -230,13 +248,23 @@ export default function MainPage() {
 
             {/* Desktop Action Buttons (hidden on mobile) */}
             <div className="hidden sm:flex items-center gap-2 sm:gap-3 3xl:gap-4 shrink-0">
+              {/* Display-only Auto Refresh Countdown Badge */}
+              <div
+                className="flex items-center gap-1.5 px-3 py-1.5 3xl:px-5 3xl:py-2.5 rounded-xl bg-white/10 text-white/90 text-xs sm:text-sm 2xl:text-base 3xl:text-xl font-bold cursor-default select-none shadow-xs"
+                title="ระบบอัปเดตข้อมูลอัตโนมัติทุก 5 วินาที"
+              >
+                <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 3xl:w-6 3xl:h-6 text-white/70" />
+                <span>Auto: {secondsLeft}s</span>
+              </div>
+
               <button
                 onClick={() => refetchDetail(false)}
                 className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
-                title="รีเฟรชข้อมูล"
+                title="รีเฟรชข้อมูลตอนนี้"
               >
                 <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 ${isRefreshing ? 'animate-spin' : ''}`} />
               </button>
+
               <button
                 onClick={toggleFullscreen}
                 className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
@@ -244,6 +272,7 @@ export default function MainPage() {
               >
                 {isFullscreen ? <Minimize className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7" /> : <Maximize className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7" />}
               </button>
+
               <button
                 onClick={toggleTheme}
                 className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
@@ -253,8 +282,17 @@ export default function MainPage() {
               </button>
             </div>
 
-            {/* Mobile Actions: Hamburger Button */}
+            {/* Mobile Actions: Display-only Countdown + Hamburger Button */}
             <div className="flex sm:hidden items-center gap-1.5 shrink-0">
+              {/* Display-only Mobile Countdown Badge */}
+              <div
+                className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white/15 text-white/90 cursor-default select-none shadow-xs"
+                title="ระบบอัปเดตอัตโนมัติ"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                <span>{secondsLeft}s</span>
+              </div>
+
               <button
                 onClick={() => setIsMobileMenuOpen((v) => !v)}
                 className="p-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white transition-all cursor-pointer"
@@ -277,7 +315,7 @@ export default function MainPage() {
               >
                 <span className="flex items-center gap-2">
                   <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-                  รีเฟรชข้อมูล
+                  รีเฟรชข้อมูลตอนนี้
                 </span>
                 <span className="text-[10px] text-white/70">กดเพื่ออัปเดต</span>
               </button>
