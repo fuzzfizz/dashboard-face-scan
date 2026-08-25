@@ -1,17 +1,14 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
-import DashboardPage from './pages/DashboardPage'
-import LiveCheckinPage from './pages/LiveCheckinPage'
+import MainPage from './pages/MainPage'
 
 function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/live" element={<LiveCheckinPage />} />
-          <Route path="/live/:eventId" element={<LiveCheckinPage />} />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/" element={<MainPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
