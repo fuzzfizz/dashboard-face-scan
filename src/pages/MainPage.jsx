@@ -149,11 +149,13 @@ export default function MainPage() {
   const handleDetailRefresh = useCallback(() => { refetchDetail() }, [refetchDetail])
   const { secondsLeft, isActive, toggle } = useAutoRefresh(handleDetailRefresh, 5000, true)
 
-  // Latest participant
+  // Latest participant vs Selected participant
   const sorted = useMemo(() => {
     return [...participants].sort((a, b) => new Date(b.regis_date) - new Date(a.regis_date))
   }, [participants])
-  const latestParticipant = selectedParticipant || sorted[0] || null
+  const latestParticipant = sorted[0] || null
+  const isSelectedParticipant = selectedParticipant !== null && selectedParticipant.regis_id !== latestParticipant?.regis_id
+  const displayParticipant = selectedParticipant || latestParticipant
 
   // Reset selection when switching events
   useEffect(() => { setSelectedParticipant(null) }, [selectedEventId])
@@ -248,13 +250,18 @@ export default function MainPage() {
         {/* Main Split: Left 70% / Right 30% */}
         <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
           <div className="w-full lg:w-[70%] border-b lg:border-b-0 lg:border-r border-neutral-200 dark:border-neutral-800 shrink-0 overflow-hidden">
-            <LeftPanel event={event || selectedEvent} summary={summary} latestParticipant={latestParticipant} />
+            <LeftPanel
+              event={event || selectedEvent}
+              summary={summary}
+              displayParticipant={displayParticipant}
+              isSelectedParticipant={isSelectedParticipant}
+            />
           </div>
           <div className="w-full lg:w-[30%] flex-1 min-h-0 flex flex-col">
             <RightPanel
               participants={participants}
               summary={summary}
-              selectedId={latestParticipant?.regis_id}
+              selectedId={displayParticipant?.regis_id}
               onSelect={(p) => setSelectedParticipant(p)}
             />
           </div>

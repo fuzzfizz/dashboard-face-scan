@@ -99,12 +99,15 @@ function generateParticipants(eventId, eventDate, timeStart, count) {
     const scanTime = new Date(baseTime.getTime() + offsetMinutes * 60000)
     const userType = randomItem(USER_TYPES)
 
+    const name = `${randomItem(THAI_FIRST_NAMES)} ${randomItem(THAI_LAST_NAMES)}`
+    const pid = `${eventId}-p${String(i + 1).padStart(3, '0')}`
+
     participants.push({
-      regis_id: `${eventId}-p${String(i + 1).padStart(3, '0')}`,
-      participant_name: `${randomItem(THAI_FIRST_NAMES)} ${randomItem(THAI_LAST_NAMES)}`,
+      regis_id: pid,
+      participant_name: name,
       user_type: userType,
       user_department: randomItem(DEPARTMENTS),
-      participant_photo: null,
+      participant_photo: `https://i.pravatar.cc/150?u=${pid}`,
       regis_date: scanTime.toISOString().replace('T', ' ').substring(0, 19),
     })
   }

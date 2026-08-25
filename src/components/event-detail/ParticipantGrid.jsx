@@ -51,12 +51,12 @@ export default function ParticipantGrid({ participants = [], selectedId, onSelec
   return (
     <div className="flex flex-col flex-1 min-h-0 overflow-hidden bg-white dark:bg-neutral-900">
       {/* Header & Filter */}
-      <div className="px-3 3xl:px-5 py-2 3xl:py-3 bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 flex flex-wrap items-center justify-between gap-2 shrink-0 transition-colors">
+      <div className="px-3 3xl:px-5 py-2.5 3xl:py-3.5 bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 flex flex-wrap items-center justify-between gap-2 shrink-0 transition-colors">
         <div className="flex items-center gap-1.5">
-          <h3 className="font-semibold text-xs sm:text-sm 3xl:text-xl text-neutral-800 dark:text-neutral-100">
-            ผู้ Check-in
+          <h3 className="font-bold text-xs sm:text-sm 3xl:text-xl text-neutral-800 dark:text-neutral-100">
+            ผู้เข้าร่วม
           </h3>
-          <span className="px-2 py-0.5 3xl:px-3 3xl:py-1 rounded-full text-[11px] 3xl:text-base font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">
+          <span className="px-2 py-0.5 3xl:px-3 3xl:py-1 rounded-full text-[11px] 3xl:text-base font-bold bg-primary/10 text-primary dark:text-indigo-300">
             {filtered.length}
           </span>
         </div>
@@ -90,13 +90,15 @@ export default function ParticipantGrid({ participants = [], selectedId, onSelec
           </div>
         </div>
       ) : (
-        <div className="overflow-y-auto flex-1 bg-white dark:bg-neutral-900">
+        <div className="overflow-y-auto flex-1 bg-white dark:bg-neutral-900 divide-y divide-neutral-100 dark:divide-neutral-800/80">
           {filtered.map((p) => {
             const isSelected = p.regis_id === selectedId
             const isHighlighted = p.regis_id === highlightedId
             const time = p.regis_date
               ? new Date(p.regis_date).toLocaleTimeString('th-TH', {
-                  hour: '2-digit', minute: '2-digit', second: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
                 })
               : ''
 
@@ -104,26 +106,47 @@ export default function ParticipantGrid({ participants = [], selectedId, onSelec
               <div
                 key={p.regis_id}
                 onClick={() => onSelect(p)}
-                className={`flex items-center gap-2.5 3xl:gap-4 px-3 3xl:px-5 py-2.5 3xl:py-4 border-b border-neutral-100 dark:border-neutral-800 cursor-pointer transition-all duration-300 ${
+                className={`flex items-center gap-2.5 3xl:gap-4 px-3 3xl:px-5 py-2.5 3xl:py-3.5 cursor-pointer transition-all duration-200 ${
                   isSelected
-                    ? 'bg-primary-light/90 dark:bg-primary/10 border-l-4 border-l-primary'
+                    ? 'bg-primary/10 dark:bg-primary/20 border-l-4 border-l-primary'
                     : isHighlighted
                     ? 'bg-indigo-50/90 dark:bg-indigo-950/30 border-l-4 border-l-primary shadow-xs animate-glow'
                     : 'hover:bg-neutral-50 dark:hover:bg-neutral-800/50'
                 }`}
               >
-                {/* Avatar */}
+                {/* Participant Photo / Avatar with Status Dot */}
                 <div className="relative shrink-0">
-                  <div className="w-8 h-8 3xl:w-12 3xl:h-12 rounded-full bg-primary-light dark:bg-primary/20 text-primary dark:text-indigo-300 font-bold text-xs 3xl:text-lg flex items-center justify-center">
+                  {p.participant_photo ? (
+                    <img
+                      src={p.participant_photo}
+                      alt={p.participant_name}
+                      className="w-9 h-9 3xl:w-13 3xl:h-13 rounded-full object-cover shadow-2xs ring-1 ring-neutral-200 dark:ring-neutral-700"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none'
+                        if (e.currentTarget.nextElementSibling) {
+                          e.currentTarget.nextElementSibling.style.display = 'flex'
+                        }
+                      }}
+                    />
+                  ) : null}
+                  <div
+                    className={`w-9 h-9 3xl:w-13 3xl:h-13 rounded-full bg-primary-light dark:bg-primary/20 text-primary dark:text-indigo-300 font-bold text-xs 3xl:text-base items-center justify-center ${
+                      p.participant_photo ? 'hidden' : 'flex'
+                    }`}
+                  >
                     {getInitial(p.participant_name)}
                   </div>
-                  <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 3xl:w-3.5 3xl:h-3.5 rounded-full border-2 border-white dark:border-neutral-900 ${TYPE_DOT[p.user_type] || TYPE_DOT.guest}`} />
+                  <span
+                    className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 3xl:w-3.5 3xl:h-3.5 rounded-full border-2 border-white dark:border-neutral-900 ${
+                      TYPE_DOT[p.user_type] || TYPE_DOT.guest
+                    }`}
+                  />
                 </div>
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-sm 3xl:text-xl font-medium text-neutral-800 dark:text-neutral-100 truncate">
+                    <span className="text-xs sm:text-sm 3xl:text-lg font-bold text-neutral-800 dark:text-neutral-100 truncate">
                       {p.participant_name}
                     </span>
                     {isHighlighted && (
@@ -138,7 +161,7 @@ export default function ParticipantGrid({ participants = [], selectedId, onSelec
                 </div>
 
                 {/* Time */}
-                <span className="text-[11px] 3xl:text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap shrink-0">
+                <span className="text-[11px] 3xl:text-sm font-medium text-neutral-400 dark:text-neutral-500 whitespace-nowrap shrink-0">
                   {time}
                 </span>
               </div>
