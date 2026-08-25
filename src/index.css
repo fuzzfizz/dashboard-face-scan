@@ -53,6 +53,59 @@ html {
   from { width: 0%; }
 }
 
+/* Sci-Fi Scanner Keyframes */
+@keyframes laser-scan {
+  0% {
+    top: 0%;
+    opacity: 0.1;
+  }
+  15% {
+    opacity: 0.95;
+  }
+  85% {
+    opacity: 0.95;
+  }
+  100% {
+    top: 96%;
+    opacity: 0.1;
+  }
+}
+
+@keyframes hud-rotate-cw {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes hud-rotate-ccw {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes radar-wave {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+@keyframes reticle-breathe {
+  0%, 100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.025);
+  }
+}
+
 /* === Utility Classes === */
 
 .animate-glow {
@@ -81,3 +134,27 @@ html {
   animation: progress-fill 0.6s ease-out both;
 }
 
+/* Sci-Fi Scanner Animation Utilities */
+.animate-laser-scan {
+  animation: laser-scan 2.6s ease-in-out infinite alternate;
+}
+
+.animate-hud-cw {
+  animation: hud-rotate-cw 24s linear infinite;
+}
+
+.animate-hud-ccw {
+  animation: hud-rotate-ccw 16s linear infinite;
+}
+
+.animate-radar-wave {
+  animation: radar-wave 3s cubic-bezier(0.1, 0.5, 0.4, 1) infinite;
+}
+
+.animate-radar-wave-delayed {
+  animation: radar-wave 3s cubic-bezier(0.1, 0.5, 0.4, 1) 1.5s infinite;
+}
+
+.animate-reticle-breathe {
+  animation: reticle-breathe 3.5s ease-in-out infinite;
+}

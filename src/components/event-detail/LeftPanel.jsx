@@ -8,6 +8,7 @@ import {
   Clock,
   Building,
   User,
+  Sparkles,
 } from 'lucide-react'
 import QRCode from 'qrcode'
 import { getInitial } from '../../utils/helpers'
@@ -44,14 +45,90 @@ function useCountUp(target, duration = 600) {
   return value
 }
 
+/* === Sci-Fi HUD Reticle Corner Brackets === */
+function ReticleCorners({ color = 'border-primary/80 dark:border-cyan-400/80' }) {
+  return (
+    <>
+      <span className={`absolute top-2.5 left-2.5 w-3.5 h-3.5 3xl:w-6 3xl:h-6 border-t-2 border-l-2 ${color} rounded-tl-xs pointer-events-none opacity-80 animate-reticle-breathe`} />
+      <span className={`absolute top-2.5 right-2.5 w-3.5 h-3.5 3xl:w-6 3xl:h-6 border-t-2 border-r-2 ${color} rounded-tr-xs pointer-events-none opacity-80 animate-reticle-breathe`} />
+      <span className={`absolute bottom-2.5 left-2.5 w-3.5 h-3.5 3xl:w-6 3xl:h-6 border-b-2 border-l-2 ${color} rounded-bl-xs pointer-events-none opacity-80 animate-reticle-breathe`} />
+      <span className={`absolute bottom-2.5 right-2.5 w-3.5 h-3.5 3xl:w-6 3xl:h-6 border-b-2 border-r-2 ${color} rounded-br-xs pointer-events-none opacity-80 animate-reticle-breathe`} />
+    </>
+  )
+}
+
+/* === Continuous Laser Scan Beam Overlay === */
+function LaserScanOverlay() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-2xl z-10">
+      <div className="absolute left-0 right-0 h-1 sm:h-1.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_14px_#06b6d4] animate-laser-scan">
+        <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-cyan-400/15 to-transparent pointer-events-none" />
+      </div>
+    </div>
+  )
+}
+
+/* === Dual Rotating HUD Target Rings === */
+function HudTargetRings() {
+  return (
+    <div className="absolute inset-[-14px] sm:inset-[-18px] 2xl:inset-[-22px] 3xl:inset-[-36px] pointer-events-none z-0">
+      {/* Outer Segmented HUD Ring (Clockwise) */}
+      <svg
+        className="w-full h-full animate-hud-cw text-primary/45 dark:text-cyan-400/50"
+        viewBox="0 0 100 100"
+      >
+        <circle
+          cx="50"
+          cy="50"
+          r="46"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeDasharray="18 10 35 12 18 10"
+        />
+        <circle cx="50" cy="4" r="1.5" fill="currentColor" />
+        <circle cx="96" cy="50" r="1.5" fill="currentColor" />
+        <circle cx="50" cy="96" r="1.5" fill="currentColor" />
+        <circle cx="4" cy="50" r="1.5" fill="currentColor" />
+      </svg>
+
+      {/* Inner Target Ring (Counter-Clockwise) */}
+      <svg
+        className="absolute inset-[5px] 3xl:inset-[9px] w-[calc(100%-10px)] 3xl:w-[calc(100%-18px)] h-[calc(100%-10px)] 3xl:h-[calc(100%-18px)] animate-hud-ccw text-indigo-500/35 dark:text-indigo-400/40"
+        viewBox="0 0 100 100"
+      >
+        <circle
+          cx="50"
+          cy="50"
+          r="46"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.2"
+          strokeDasharray="8 8 20 8"
+        />
+      </svg>
+    </div>
+  )
+}
+
+/* === Live Radar Concentric Waves === */
+function RadarRippleWaves() {
+  return (
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+      <div className="absolute w-full h-full rounded-full border-2 border-primary/25 dark:border-cyan-400/30 animate-radar-wave" />
+      <div className="absolute w-full h-full rounded-full border-2 border-indigo-400/20 dark:border-indigo-400/25 animate-radar-wave-delayed" />
+    </div>
+  )
+}
+
 function StatCard({ icon: Icon, label, value, color, bgColor, iconBg }) {
   const displayValue = useCountUp(value)
 
   return (
     <div
-      className={`${bgColor} rounded-2xl p-3 sm:p-4 2xl:p-5 3xl:p-7 border border-neutral-200/80 dark:border-neutral-800 shadow-xs hover:shadow-sm transition-all flex items-center justify-between gap-2.5 sm:gap-3 shrink-0`}
+      className={`${bgColor} rounded-2xl p-3 sm:p-4 2xl:p-5 3xl:p-7 border border-neutral-200/80 dark:border-neutral-800 shadow-xs hover:shadow-sm transition-all flex items-center justify-between gap-2.5 sm:gap-3 shrink-0 relative overflow-hidden`}
     >
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 relative z-10">
         <p className={`text-xs sm:text-sm 2xl:text-base 3xl:text-2xl font-black ${color} truncate mb-0.5 3xl:mb-1.5`}>
           {label}
         </p>
@@ -59,7 +136,7 @@ function StatCard({ icon: Icon, label, value, color, bgColor, iconBg }) {
           {displayValue.toLocaleString()}
         </p>
       </div>
-      <div className={`p-2 sm:p-2.5 2xl:p-3.5 3xl:p-5 rounded-2xl ${iconBg} ${color} shrink-0`}>
+      <div className={`p-2 sm:p-2.5 2xl:p-3.5 3xl:p-5 rounded-2xl ${iconBg} ${color} shrink-0 relative z-10`}>
         <Icon className="w-4 h-4 sm:w-6 sm:h-6 2xl:w-8 2xl:h-8 3xl:w-12 3xl:h-12" />
       </div>
     </div>
@@ -187,18 +264,23 @@ export default function LeftPanel({
 
       {/* QR Code Card + Participant Info Card */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4 3xl:gap-6 flex-1 min-h-0 lg:overflow-hidden">
-        {/* QR Code Card */}
-        <div className="flex flex-col items-center justify-center bg-white dark:bg-neutral-900 rounded-3xl p-4 sm:p-5 2xl:p-6 3xl:p-9 border border-neutral-200/80 dark:border-neutral-800 shadow-sm min-h-[260px] sm:min-h-0">
+        {/* QR Code Card with Laser Scanner & Reticle */}
+        <div className="relative flex flex-col items-center justify-center bg-white dark:bg-neutral-900 rounded-3xl p-4 sm:p-5 2xl:p-6 3xl:p-9 border border-neutral-200/80 dark:border-neutral-800 shadow-sm min-h-[260px] sm:min-h-0 overflow-hidden">
+          <ReticleCorners />
+
           <p className="text-base sm:text-lg 2xl:text-2xl 3xl:text-4xl font-black text-neutral-800 dark:text-neutral-100 mb-2 sm:mb-3 3xl:mb-5 shrink-0 text-center tracking-tight">
             QR Code สแกนเข้างาน
           </p>
 
-          <div className="flex-1 min-h-0 flex items-center justify-center p-2.5 sm:p-3.5 bg-white rounded-2xl shadow-xs border border-neutral-200/80 max-h-[190px] sm:max-h-[240px] 2xl:max-h-[300px] 3xl:max-h-[440px] aspect-square w-full">
+          {/* QR Code Container with Continuous Laser Beam */}
+          <div className="relative flex-1 min-h-0 flex items-center justify-center p-2.5 sm:p-3.5 bg-white rounded-2xl shadow-xs border border-neutral-200/80 max-h-[190px] sm:max-h-[240px] 2xl:max-h-[300px] 3xl:max-h-[440px] aspect-square w-full overflow-hidden">
+            <LaserScanOverlay />
+
             {event?.qr_img ? (
               <img
                 src={event.qr_img}
                 alt="QR Code"
-                className="w-full h-full object-contain rounded-xl"
+                className="w-full h-full object-contain rounded-xl relative z-0"
               />
             ) : (
               <div className="w-full h-full rounded-2xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-400">
@@ -211,34 +293,45 @@ export default function LeftPanel({
           <button
             onClick={handleSaveQR}
             disabled={!event?.qr_img}
-            className="mt-2.5 sm:mt-3 3xl:mt-4 flex items-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 3xl:px-5 3xl:py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs sm:text-sm 3xl:text-base font-bold transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shadow-xs shrink-0"
+            className="mt-2.5 sm:mt-3 3xl:mt-4 flex items-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 3xl:px-5 3xl:py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs sm:text-sm 3xl:text-base font-bold transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shadow-xs shrink-0 relative z-20"
           >
             <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 3xl:w-5 3xl:h-5" />
             <span>บันทึก QR Code</span>
           </button>
         </div>
 
-        {/* Participant Info Card */}
+        {/* Participant Info Card with Dual HUD Reticle & Radar Waves */}
         <div
-          className={`flex flex-col items-center justify-center bg-white dark:bg-neutral-900 rounded-3xl p-4 sm:p-5 2xl:p-6 3xl:p-9 border shadow-sm transition-all duration-300 min-h-[260px] sm:min-h-0 ${
+          className={`relative flex flex-col items-center justify-center bg-white dark:bg-neutral-900 rounded-3xl p-4 sm:p-5 2xl:p-6 3xl:p-9 border shadow-sm transition-all duration-300 min-h-[260px] sm:min-h-0 overflow-hidden ${
             isNewScan
               ? 'border-primary ring-4 sm:ring-8 ring-primary/20 shadow-xl animate-glow'
               : 'border-neutral-200/80 dark:border-neutral-800'
           }`}
         >
+          <ReticleCorners />
+
           {displayParticipant ? (
             <div
-              className={`w-full flex flex-col items-center text-center justify-center transition-all duration-300 ${
+              className={`w-full flex flex-col items-center text-center justify-center transition-all duration-300 relative z-10 ${
                 isNewScan ? 'scale-105' : 'scale-100'
               }`}
             >
-              {/* Photo or Avatar */}
-              <div className="relative mb-2.5 sm:mb-3 2xl:mb-4 3xl:mb-6 shrink-0">
+              {/* Photo or Avatar with Dual HUD Target Rings & Radar Waves */}
+              <div className="relative mb-2.5 sm:mb-3 2xl:mb-4 3xl:mb-6 shrink-0 flex items-center justify-center">
+                {/* Continuous Radar Ripple Waves */}
+                <RadarRippleWaves />
+
+                {/* Continuous Dual Rotating HUD Rings */}
+                <HudTargetRings />
+
+                {/* Laser scan beam overlay for avatar */}
+                <LaserScanOverlay />
+
                 {displayParticipant.participant_photo ? (
                   <img
                     src={displayParticipant.participant_photo}
                     alt={displayParticipant.participant_name}
-                    className="w-18 h-18 sm:w-22 sm:h-22 2xl:w-28 2xl:h-28 3xl:w-44 3xl:h-44 rounded-full object-cover shadow-xl ring-4 sm:ring-6 ring-primary/20"
+                    className="w-18 h-18 sm:w-22 sm:h-22 2xl:w-28 2xl:h-28 3xl:w-44 3xl:h-44 rounded-full object-cover shadow-xl ring-4 sm:ring-6 ring-primary/30 relative z-10"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none'
                       if (e.currentTarget.nextElementSibling) {
@@ -248,7 +341,7 @@ export default function LeftPanel({
                   />
                 ) : null}
                 <div
-                  className={`w-18 h-18 sm:w-22 sm:h-22 2xl:w-28 2xl:h-28 3xl:w-44 3xl:h-44 rounded-full bg-primary-light dark:bg-primary/20 text-primary dark:text-indigo-300 font-black text-2xl sm:text-3xl 2xl:text-4xl 3xl:text-6xl items-center justify-center ring-4 sm:ring-6 ring-primary/20 shadow-xl ${
+                  className={`w-18 h-18 sm:w-22 sm:h-22 2xl:w-28 2xl:h-28 3xl:w-44 3xl:h-44 rounded-full bg-primary-light dark:bg-primary/20 text-primary dark:text-indigo-300 font-black text-2xl sm:text-3xl 2xl:text-4xl 3xl:text-6xl items-center justify-center ring-4 sm:ring-6 ring-primary/30 shadow-xl relative z-10 ${
                     displayParticipant.participant_photo ? 'hidden' : 'flex'
                   }`}
                 >
@@ -285,9 +378,13 @@ export default function LeftPanel({
               </div>
             </div>
           ) : (
-            <div className="text-center p-4">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 3xl:w-24 3xl:h-24 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mx-auto mb-2.5 sm:mb-3 3xl:mb-4 animate-pulse">
-                <User className="w-7 h-7 sm:w-8 sm:h-8 3xl:w-12 3xl:h-12 text-neutral-400" />
+            <div className="text-center p-4 relative z-10">
+              <div className="relative w-18 h-18 sm:w-22 sm:h-22 3xl:w-32 3xl:h-32 mx-auto mb-2.5 sm:mb-3 3xl:mb-4 flex items-center justify-center">
+                <RadarRippleWaves />
+                <HudTargetRings />
+                <div className="w-14 h-14 sm:w-16 sm:h-16 3xl:w-24 3xl:h-24 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center relative z-10 shadow-md">
+                  <User className="w-7 h-7 sm:w-8 sm:h-8 3xl:w-12 3xl:h-12 text-neutral-400" />
+                </div>
               </div>
               <p className="text-xs sm:text-sm 2xl:text-base 3xl:text-xl text-neutral-400 dark:text-neutral-500 font-bold">
                 รอผู้เข้าร่วมสแกนเข้างาน...
