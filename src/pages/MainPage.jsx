@@ -38,6 +38,7 @@ export default function MainPage() {
   }
 
   // ========== Event List State ==========
+  const [filterMode, setFilterMode] = useState(() => sessionStorage.getItem('dashboard_filter_mode') || 'single')
   const [startDate, setStartDate] = useState(() => sessionStorage.getItem('dashboard_start_date') || today)
   const [endDate, setEndDate] = useState(() => sessionStorage.getItem('dashboard_end_date') || today)
   const [activePreset, setActivePreset] = useState(() => sessionStorage.getItem('dashboard_preset') || 'today')
@@ -47,10 +48,11 @@ export default function MainPage() {
   const { events, count, loading: eventsLoading, error, refetch } = useEvents(startDate, endDate)
 
   useEffect(() => {
+    sessionStorage.setItem('dashboard_filter_mode', filterMode)
     sessionStorage.setItem('dashboard_start_date', startDate)
     sessionStorage.setItem('dashboard_end_date', endDate)
     sessionStorage.setItem('dashboard_preset', activePreset)
-  }, [startDate, endDate, activePreset])
+  }, [filterMode, startDate, endDate, activePreset])
 
   const isToday = startDate === today && endDate === today
 
@@ -62,10 +64,49 @@ export default function MainPage() {
 
   const applyPreset = (preset) => {
     setActivePreset(preset)
-    if (preset === 'today') { setStartDate(today); setEndDate(today) }
-    else if (preset === '7days') { setStartDate(getDaysAgo(6)); setEndDate(today) }
-    else if (preset === 'month') { setStartDate(getStartOfMonth()); setEndDate(today) }
-    else if (preset === 'year') { setStartDate(getStartOfYear()); setEndDate(today) }
+    if (preset === 'today') {
+      setStartDate(today)
+      setEndDate(today)
+    } else if (preset === 'yesterday') {
+      const y = getDaysAgo(1)
+      setStartDate(y)
+      setEndDate(y)
+    } else if (preset === '7days') {
+      setStartDate(getDaysAgo(6))
+      setEndDate(today)
+    } else if (preset === 'month') {
+      setStartDate(getStartOfMonth())
+      setEndDate(today)
+    } else if (preset === 'year') {
+      setStartDate(getStartOfYear())
+      setEndDate(today)
+    }
+  }
+
+  const handleFilterModeChange = (mode) => {
+    setFilterMode(mode)
+    if (mode === 'single') {
+      // If switching to single mode, set both to startDate (or today)
+      const target = startDate || today
+      setStartDate(target)
+      setEndDate(target)
+      setActivePreset(target === today ? 'today' : target === getDaysAgo(1) ? 'yesterday' : 'custom')
+    } else {
+      // If switching to range mode and dates are same, default to 7 days
+      if (startDate === endDate) {
+        setStartDate(getDaysAgo(6))
+        setEndDate(today)
+        setActivePreset('7days')
+      } else {
+        setActivePreset('custom')
+      }
+    }
+  }
+
+  const handleSingleDateChange = (value) => {
+    setStartDate(value)
+    setEndDate(value)
+    setActivePreset(value === today ? 'today' : value === getDaysAgo(1) ? 'yesterday' : 'custom')
   }
 
   const handleStartDateChange = (value) => { setStartDate(value); setActivePreset('custom') }
@@ -252,6 +293,9 @@ export default function MainPage() {
           startDate={startDate}
           endDate={endDate}
           activePreset={activePreset}
+          filterMode={filterMode}
+          onFilterModeChange={handleFilterModeChange}
+          onSingleDateChange={handleSingleDateChange}
           onStartDateChange={handleStartDateChange}
           onEndDateChange={handleEndDateChange}
           onPresetChange={applyPreset}
