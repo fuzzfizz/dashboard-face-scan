@@ -343,8 +343,6 @@ export default function MainPage() {
             <LeftPanel
               event={event || selectedEvent}
               summary={summary}
-              displayParticipant={displayParticipant}
-              isSelectedParticipant={isSelectedParticipant}
             />
           </div>
           <div className="w-full lg:w-[30%] min-h-[480px] lg:min-h-0 flex-1 flex flex-col lg:overflow-hidden">
