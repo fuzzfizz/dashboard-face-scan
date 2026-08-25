@@ -8,7 +8,7 @@ import {
   ArrowRight,
   ChevronLeft,
   ChevronRight,
-  Sparkles,
+  CalendarCheck,
 } from 'lucide-react'
 import { formatDate, formatDateShort, formatTime, getToday } from '../../utils/helpers'
 
@@ -67,12 +67,12 @@ export default function EventTable({ events = [], participantsMap = {}, onSelect
 
   if (events.length === 0) {
     return (
-      <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-8 3xl:p-12 text-center animate-fade-in">
-        <Calendar className="w-12 h-12 3xl:w-16 3xl:h-16 text-neutral-300 dark:text-neutral-700 mx-auto mb-3" />
-        <h3 className="text-base 3xl:text-2xl font-bold text-neutral-800 dark:text-neutral-200 mb-1">
+      <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-sm border border-neutral-200/80 dark:border-neutral-800 p-10 3xl:p-16 text-center animate-fade-in">
+        <CalendarCheck className="w-16 h-16 3xl:w-24 3xl:h-24 text-neutral-300 dark:text-neutral-700 mx-auto mb-4" />
+        <h3 className="text-xl sm:text-2xl 3xl:text-4xl font-extrabold text-neutral-800 dark:text-neutral-200 mb-2">
           ไม่มีข้อมูลกิจกรรม
         </h3>
-        <p className="text-neutral-400 text-sm 3xl:text-lg">
+        <p className="text-neutral-500 dark:text-neutral-400 text-sm sm:text-base 3xl:text-2xl">
           ไม่พบรายการกิจกรรมในช่วงเวลาที่เลือก คุณสามารถเปลี่ยนช่วงเวลาหรือกดรีเฟรชข้อมูลได้
         </p>
       </div>
@@ -80,28 +80,28 @@ export default function EventTable({ events = [], participantsMap = {}, onSelect
   }
 
   return (
-    <div className="space-y-4 sm:space-y-5 3xl:space-y-8 animate-fade-in" style={{ animationDelay: '200ms' }}>
+    <div className="space-y-6 sm:space-y-7 3xl:space-y-10 animate-fade-in" style={{ animationDelay: '200ms' }}>
       {/* Header with Search & Filter Pills */}
-      <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-4 sm:p-5 3xl:p-8 transition-colors">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-sm border border-neutral-200/80 dark:border-neutral-800 p-5 sm:p-7 2xl:p-8 3xl:p-12 transition-colors">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 sm:gap-6">
           <div>
-            <div className="flex items-center gap-2 3xl:gap-3">
-              <h2 className="text-base sm:text-lg 2xl:text-2xl 3xl:text-3xl font-bold text-neutral-800 dark:text-neutral-100">
+            <div className="flex items-center gap-3 3xl:gap-4">
+              <h2 className="text-lg sm:text-2xl 2xl:text-3xl 3xl:text-5xl font-black text-neutral-800 dark:text-neutral-100 tracking-tight">
                 รายการกิจกรรม
               </h2>
-              <span className="px-2.5 py-0.5 3xl:px-3.5 3xl:py-1 rounded-full text-xs 3xl:text-base font-bold bg-primary/10 text-primary dark:text-indigo-300">
+              <span className="px-3.5 py-1 3xl:px-5 3xl:py-2 rounded-full text-xs sm:text-sm 2xl:text-base 3xl:text-2xl font-bold bg-primary/10 text-primary dark:text-indigo-300">
                 {totalItems} รายการ
               </span>
             </div>
-            <p className="text-xs 3xl:text-base text-neutral-500 dark:text-neutral-400 mt-1">
+            <p className="text-xs sm:text-sm 2xl:text-base 3xl:text-2xl text-neutral-500 dark:text-neutral-400 mt-1.5 3xl:mt-2.5 font-medium">
               คลิกที่การ์ดกิจกรรมเพื่อเข้าสู่หน้า Live Check-in และดูสถิติ
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
             {/* Search Input */}
-            <div className="relative flex-1 sm:w-64 3xl:w-96">
-              <Search className="w-4 h-4 3xl:w-5 3xl:h-5 text-neutral-400 absolute left-3 3xl:left-4 top-1/2 -translate-y-1/2" />
+            <div className="relative flex-1 sm:w-80 3xl:w-[480px]">
+              <Search className="w-5 h-5 3xl:w-7 3xl:h-7 text-neutral-400 absolute left-4 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 placeholder="ค้นหากิจกรรม, สถานที่..."
@@ -110,30 +110,30 @@ export default function EventTable({ events = [], participantsMap = {}, onSelect
                   setSearchTerm(e.target.value)
                   setCurrentPage(1)
                 }}
-                className="w-full pl-9 3xl:pl-12 pr-3 py-2 3xl:py-3 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 rounded-xl text-xs 3xl:text-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-colors"
+                className="w-full pl-12 3xl:pl-16 pr-4 py-3 sm:py-3.5 3xl:py-5 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 rounded-2xl text-xs sm:text-sm 2xl:text-base 3xl:text-2xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium"
               />
             </div>
 
-            {/* Page size */}
+            {/* Page size dropdown */}
             <select
               value={pageSize}
               onChange={(e) => {
                 setPageSize(Number(e.target.value))
                 setCurrentPage(1)
               }}
-              className="bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-xl px-3 py-2 3xl:py-3 text-xs 3xl:text-lg text-neutral-700 dark:text-neutral-200 focus:outline-none focus:border-primary cursor-pointer w-full sm:w-auto"
+              className="bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl px-4 py-3 sm:py-3.5 3xl:py-5 text-xs sm:text-sm 2xl:text-base 3xl:text-2xl font-bold text-neutral-700 dark:text-neutral-200 focus:outline-none focus:border-primary cursor-pointer w-full sm:w-auto shadow-2xs"
             >
-              <option value={6}>6 การ์ด/หน้า</option>
-              <option value={9}>9 การ์ด/หน้า</option>
-              <option value={12}>12 การ์ด/หน้า</option>
+              <option value={6}>6 การ์ด / หน้า</option>
+              <option value={9}>9 การ์ด / หน้า</option>
+              <option value={12}>12 การ์ด / หน้า</option>
             </select>
           </div>
         </div>
 
-        {/* Type Filter Pills (if multiple types exist) */}
+        {/* Type Filter Pills */}
         {eventTypes.length > 2 && (
-          <div className="flex items-center gap-1.5 3xl:gap-2 mt-3.5 pt-3.5 border-t border-neutral-100 dark:border-neutral-800 overflow-x-auto pb-1">
-            <span className="text-xs 3xl:text-base font-medium text-neutral-400 dark:text-neutral-500 shrink-0 mr-1">
+          <div className="flex items-center gap-2 3xl:gap-3 mt-4 sm:mt-5 pt-4 sm:pt-5 border-t border-neutral-100 dark:border-neutral-800 overflow-x-auto pb-1">
+            <span className="text-xs sm:text-sm 2xl:text-base 3xl:text-2xl font-bold text-neutral-400 dark:text-neutral-500 shrink-0 mr-1">
               ประเภท:
             </span>
             {eventTypes.map((type) => (
@@ -143,9 +143,9 @@ export default function EventTable({ events = [], participantsMap = {}, onSelect
                   setSelectedType(type)
                   setCurrentPage(1)
                 }}
-                className={`px-3 py-1 3xl:px-4 3xl:py-1.5 rounded-lg text-xs 3xl:text-base font-medium transition-all shrink-0 cursor-pointer ${
+                className={`px-4 py-2 sm:px-5 sm:py-2.5 3xl:px-7 3xl:py-3.5 rounded-xl text-xs sm:text-sm 2xl:text-base 3xl:text-2xl font-bold transition-all shrink-0 cursor-pointer ${
                   selectedType === type
-                    ? 'bg-primary text-white shadow-xs font-semibold'
+                    ? 'bg-primary text-white shadow-sm'
                     : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700'
                 }`}
               >
@@ -156,9 +156,9 @@ export default function EventTable({ events = [], participantsMap = {}, onSelect
         )}
       </div>
 
-      {/* Modern Event Cards Grid */}
+      {/* Modern Large Event Cards Grid */}
       {paginatedEvents.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 3xl:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6 2xl:gap-7 3xl:gap-10">
           {paginatedEvents.map((ev, index) => {
             const summary = participantsMap[ev.event_id]
             const participantCount = summary ? summary.total : 0
@@ -169,27 +169,27 @@ export default function EventTable({ events = [], participantsMap = {}, onSelect
               <div
                 key={ev.event_id}
                 onClick={() => onSelectEvent(ev.event_id)}
-                className="group relative bg-white dark:bg-neutral-900 rounded-2xl p-5 3xl:p-8 border border-neutral-200/80 dark:border-neutral-800 shadow-xs hover:shadow-xl hover:border-primary/50 dark:hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between overflow-hidden animate-fade-in"
+                className="group relative bg-white dark:bg-neutral-900 rounded-3xl p-6 sm:p-7 2xl:p-8 3xl:p-12 border border-neutral-200/80 dark:border-neutral-800 shadow-sm hover:shadow-2xl hover:border-primary/60 dark:hover:border-primary/60 transition-all duration-300 hover:-translate-y-1.5 cursor-pointer flex flex-col justify-between overflow-hidden animate-fade-in"
                 style={{ animationDelay: `${index * 60}ms` }}
               >
-                {/* Accent Top Gradient on Hover */}
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 to-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                {/* Top Accent Gradient Bar */}
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-500 via-primary to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity" />
 
                 <div>
                   {/* Top Badges */}
-                  <div className="flex items-center justify-between gap-2 mb-3 3xl:mb-4">
+                  <div className="flex items-center justify-between gap-2 mb-4 3xl:mb-6">
                     <span
-                      className={`px-3 py-1 3xl:px-4 3xl:py-1.5 rounded-xl text-xs 3xl:text-base font-semibold border ${typeStyle}`}
+                      className={`px-4 py-1.5 3xl:px-6 3xl:py-2.5 rounded-2xl text-xs sm:text-sm 2xl:text-base 3xl:text-2xl font-black border ${typeStyle}`}
                     >
                       {ev.event_type || 'กิจกรรม'}
                     </span>
 
                     {isEventToday ? (
-                      <span className="flex items-center gap-1 px-2.5 py-0.5 3xl:px-3.5 3xl:py-1 rounded-full text-[11px] 3xl:text-sm font-bold bg-green-100 dark:bg-green-950/60 text-green-700 dark:text-green-300 animate-pulse">
-                        <span className="w-1.5 h-1.5 3xl:w-2 3xl:h-2 rounded-full bg-green-500" /> วันนี้
+                      <span className="flex items-center gap-1.5 px-3.5 py-1 3xl:px-5 3xl:py-2 rounded-full text-xs sm:text-sm 3xl:text-xl font-black bg-green-100 dark:bg-green-950/60 text-green-700 dark:text-green-300 animate-pulse">
+                        <span className="w-2 h-2 3xl:w-3 3xl:h-3 rounded-full bg-green-500" /> วันนี้
                       </span>
                     ) : (
-                      <span className="text-xs 3xl:text-base font-medium text-neutral-400 dark:text-neutral-500">
+                      <span className="text-xs sm:text-sm 2xl:text-base 3xl:text-xl font-bold text-neutral-400 dark:text-neutral-500">
                         {formatDateShort(ev.event_date)}
                       </span>
                     )}
@@ -197,45 +197,45 @@ export default function EventTable({ events = [], participantsMap = {}, onSelect
 
                   {/* Event Title */}
                   <h3
-                    className="text-base sm:text-lg 3xl:text-2xl font-bold text-neutral-800 dark:text-neutral-100 group-hover:text-primary dark:group-hover:text-indigo-400 transition-colors line-clamp-2 mb-3.5 3xl:mb-5 leading-snug"
+                    className="text-base sm:text-xl 2xl:text-2xl 3xl:text-4xl font-black text-neutral-800 dark:text-neutral-100 group-hover:text-primary dark:group-hover:text-indigo-400 transition-colors line-clamp-2 mb-4 sm:mb-5 3xl:mb-8 leading-snug tracking-tight"
                     title={ev.event_title}
                   >
                     {ev.event_title}
                   </h3>
 
                   {/* Meta details */}
-                  <div className="space-y-2 3xl:space-y-3 mb-4 3xl:mb-6 text-xs 3xl:text-base text-neutral-500 dark:text-neutral-400">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-3.5 h-3.5 3xl:w-5 3xl:h-5 text-indigo-500 shrink-0" />
+                  <div className="space-y-2.5 sm:space-y-3 3xl:space-y-5 mb-5 sm:mb-6 3xl:mb-8 text-xs sm:text-sm 2xl:text-base 3xl:text-2xl text-neutral-600 dark:text-neutral-300 font-medium">
+                    <div className="flex items-center gap-3">
+                      <Calendar className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 text-primary shrink-0" />
                       <span className="truncate">{formatDate(ev.event_date)}</span>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-3.5 h-3.5 3xl:w-5 3xl:h-5 text-indigo-500 shrink-0" />
+                    <div className="flex items-center gap-3">
+                      <Clock className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 text-primary shrink-0" />
                       <span>
                         {formatTime(ev.event_time_start)} - {formatTime(ev.event_time_stop)} น.
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-3.5 h-3.5 3xl:w-5 3xl:h-5 text-indigo-500 shrink-0" />
+                    <div className="flex items-center gap-3">
+                      <MapPin className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 text-primary shrink-0" />
                       <span className="truncate">{ev.event_addr || 'ไม่ระบุสถานที่'}</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Bottom Bar: Participants count + Enter action */}
-                <div className="pt-3.5 3xl:pt-5 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5 bg-neutral-50 dark:bg-neutral-800/70 px-2.5 py-1.5 3xl:px-4 3xl:py-2 rounded-xl">
-                    <Users className="w-3.5 h-3.5 3xl:w-5 3xl:h-5 text-neutral-500 dark:text-neutral-400" />
-                    <span className="text-xs 3xl:text-base text-neutral-600 dark:text-neutral-300">
-                      ผู้เข้าร่วม: <b className="text-neutral-800 dark:text-white font-bold">{participantCount}</b> คน
+                {/* Bottom Bar: Participants count + Action button */}
+                <div className="pt-4 sm:pt-5 3xl:pt-7 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2 bg-neutral-50 dark:bg-neutral-800/80 px-3.5 py-2 sm:px-4 sm:py-2.5 3xl:px-6 3xl:py-3.5 rounded-2xl border border-neutral-100 dark:border-neutral-700/50">
+                    <Users className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 text-neutral-500 dark:text-neutral-400" />
+                    <span className="text-xs sm:text-sm 2xl:text-base 3xl:text-2xl text-neutral-600 dark:text-neutral-300 font-medium">
+                      ผู้เข้าร่วม: <b className="text-neutral-900 dark:text-white font-black">{participantCount}</b> คน
                     </span>
                   </div>
 
-                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 3xl:px-5 3xl:py-2.5 rounded-xl bg-primary text-white text-xs 3xl:text-base font-semibold shadow-xs group-hover:bg-primary-dark group-hover:shadow-md transition-all group-hover:translate-x-0.5">
+                  <span className="inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 3xl:px-7 3xl:py-3.5 rounded-2xl bg-primary text-white text-xs sm:text-sm 2xl:text-base 3xl:text-2xl font-black shadow-sm group-hover:bg-primary-dark group-hover:shadow-md transition-all group-hover:translate-x-1">
                     เข้าสู่กิจกรรม
-                    <ArrowRight className="w-3.5 h-3.5 3xl:w-5 3xl:h-5 group-hover:translate-x-0.5 transition-transform" />
+                    <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 group-hover:translate-x-1 transition-transform" />
                   </span>
                 </div>
               </div>
@@ -243,39 +243,39 @@ export default function EventTable({ events = [], participantsMap = {}, onSelect
           })}
         </div>
       ) : (
-        <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-8 3xl:p-12 text-center animate-fade-in">
-          <p className="text-neutral-400 text-sm 3xl:text-xl">
+        <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-sm border border-neutral-200/80 dark:border-neutral-800 p-10 3xl:p-16 text-center animate-fade-in">
+          <p className="text-neutral-400 text-sm sm:text-base 3xl:text-2xl">
             ไม่พบกิจกรรมที่ตรงกับการค้นหา "{searchTerm}"
           </p>
         </div>
       )}
 
-      {/* Pagination Bar */}
+      {/* Large Pagination Bar */}
       {totalItems > 0 && (
-        <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 px-4 sm:px-6 3xl:px-8 py-3 3xl:py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs 3xl:text-lg text-neutral-500 dark:text-neutral-400 transition-colors">
+        <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-sm border border-neutral-200/80 dark:border-neutral-800 px-6 sm:px-8 3xl:px-12 py-4 sm:py-5 3xl:py-7 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs sm:text-sm 2xl:text-base 3xl:text-2xl text-neutral-600 dark:text-neutral-300 font-medium transition-colors">
           <div>
-            แสดง {startRecord} - {endRecord} จากทั้งหมด {totalItems} รายการ
+            แสดง {startRecord} - {endRecord} จากทั้งหมด <b className="font-bold">{totalItems}</b> รายการ
           </div>
 
-          <div className="flex items-center gap-2 self-center sm:self-auto">
+          <div className="flex items-center gap-3 self-center sm:self-auto">
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={safeCurrentPage <= 1}
-              className="p-1.5 3xl:p-2.5 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+              className="p-2 sm:p-2.5 3xl:p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer shadow-2xs active:scale-95"
             >
-              <ChevronLeft className="w-4 h-4 3xl:w-5 3xl:h-5" />
+              <ChevronLeft className="w-5 h-5 3xl:w-7 3xl:h-7" />
             </button>
 
-            <span className="px-2 font-medium text-neutral-700 dark:text-neutral-200">
+            <span className="px-3 font-bold text-neutral-800 dark:text-neutral-100">
               หน้า {safeCurrentPage} / {totalPages}
             </span>
 
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={safeCurrentPage >= totalPages}
-              className="p-1.5 3xl:p-2.5 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+              className="p-2 sm:p-2.5 3xl:p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer shadow-2xs active:scale-95"
             >
-              <ChevronRight className="w-4 h-4 3xl:w-5 3xl:h-5" />
+              <ChevronRight className="w-5 h-5 3xl:w-7 3xl:h-7" />
             </button>
           </div>
         </div>

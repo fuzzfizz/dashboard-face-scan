@@ -6,24 +6,28 @@ export default function Header() {
 
   return (
     <header className="bg-primary text-white shadow-lg sticky top-0 z-40">
-      <div className="max-w-[1920px] mx-auto px-4 sm:px-6 3xl:px-10">
-        <div className="flex items-center justify-between h-14 sm:h-16 3xl:h-20">
-          <div className="flex items-center gap-2 sm:gap-3 3xl:gap-4">
-            <ScanFace className="w-6 h-6 sm:w-7 sm:h-7 3xl:w-9 3xl:h-9 shrink-0" />
-            <span className="font-bold text-lg sm:text-xl 2xl:text-2xl 3xl:text-3xl truncate">
-              Face Scan Check-in
-            </span>
+      <div className="max-w-[2000px] mx-auto px-4 sm:px-8 2xl:px-10 3xl:px-16">
+        <div className="flex items-center justify-between h-16 sm:h-20 2xl:h-24 3xl:h-28">
+          <div className="flex items-center gap-3 sm:gap-4 3xl:gap-6">
+            <div className="p-2 sm:p-2.5 3xl:p-3.5 bg-white/10 rounded-2xl backdrop-blur-xs">
+              <ScanFace className="w-7 h-7 sm:w-9 sm:h-9 2xl:w-11 2xl:h-11 3xl:w-14 3xl:h-14 shrink-0" />
+            </div>
+            <div>
+              <span className="font-black text-xl sm:text-2xl 2xl:text-3xl 3xl:text-5xl tracking-tight block">
+                Face Scan Check-in
+              </span>
+            </div>
           </div>
 
           <button
             onClick={toggleTheme}
-            className="p-2 sm:p-2.5 3xl:p-3 rounded-xl hover:bg-white/10 active:scale-95 text-white transition-all cursor-pointer"
+            className="p-2.5 sm:p-3 2xl:p-4 3xl:p-5 rounded-2xl hover:bg-white/15 active:scale-95 text-white transition-all cursor-pointer shadow-xs"
             title={isDark ? 'เปลี่ยนเป็นธีมสว่าง' : 'เปลี่ยนเป็นธีมมืด'}
           >
             {isDark ? (
-              <Moon className="w-5 h-5 3xl:w-6 3xl:h-6 text-slate-200" />
+              <Moon className="w-6 h-6 sm:w-7 sm:h-7 3xl:w-9 3xl:h-9 text-slate-200" />
             ) : (
-              <Sun className="w-5 h-5 3xl:w-6 3xl:h-6 text-yellow-300" />
+              <Sun className="w-6 h-6 sm:w-7 sm:h-7 3xl:w-9 3xl:h-9 text-yellow-300" />
             )}
           </button>
         </div>

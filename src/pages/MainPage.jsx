@@ -279,7 +279,7 @@ export default function MainPage() {
   return (
     <div className={`min-h-screen bg-slate-50 dark:bg-gray-950 transition-colors duration-200 ${viewTransition}`}>
       <Header />
-      <main className="max-w-[1920px] mx-auto px-3 sm:px-6 lg:px-8 3xl:px-12 py-4 sm:py-6 3xl:py-10 space-y-4 sm:space-y-6 3xl:space-y-10">
+      <main className="max-w-[2000px] mx-auto px-4 sm:px-8 2xl:px-10 3xl:px-16 py-6 sm:py-8 2xl:py-10 3xl:py-16 space-y-6 sm:space-y-8 2xl:space-y-10 3xl:space-y-14">
         <DateFilter
           startDate={startDate}
           endDate={endDate}
@@ -296,7 +296,7 @@ export default function MainPage() {
         />
 
         {error && (
-          <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 3xl:px-6 3xl:py-4 rounded-xl 3xl:text-xl">
+          <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-5 py-4 3xl:px-8 3xl:py-6 rounded-2xl text-sm sm:text-base 3xl:text-2xl font-bold shadow-xs">
             {error}
           </div>
         )}
