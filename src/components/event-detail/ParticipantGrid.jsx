@@ -1,0 +1,151 @@
+import { useState, useMemo, useEffect, useRef } from 'react'
+import { getInitial, getToday } from '../../utils/helpers'
+import { Sparkles, Users } from 'lucide-react'
+
+const FILTER_TABS = [
+  { key: 'all', label: 'ทั้งหมด', color: 'text-neutral-800 dark:text-neutral-100' },
+  { key: 'staff', label: 'Staff', color: 'text-green-700 dark:text-green-400' },
+  { key: 'student', label: 'Student', color: 'text-blue-700 dark:text-blue-400' },
+  { key: 'guest', label: 'Guest', color: 'text-amber-700 dark:text-amber-400' },
+]
+
+const TYPE_DOT = {
+  staff: 'bg-green-500',
+  student: 'bg-blue-500',
+  guest: 'bg-amber-500',
+}
+
+export default function ParticipantGrid({ participants = [], selectedId, onSelect }) {
+  const [filterType, setFilterType] = useState('all')
+  const [highlightedId, setHighlightedId] = useState(null)
+  const prevLatestIdRef = useRef(null)
+  const today = getToday()
+
+  const sorted = useMemo(() => {
+    return [...participants].sort(
+      (a, b) => new Date(b.regis_date) - new Date(a.regis_date)
+    )
+  }, [participants])
+
+  const latestParticipant = sorted[0]
+  const isLatestFromToday = latestParticipant?.regis_date
+    ? latestParticipant.regis_date.startsWith(today)
+    : false
+
+  useEffect(() => {
+    if (!latestParticipant) return
+    const currentId = latestParticipant.regis_id
+    if (isLatestFromToday && currentId && currentId !== prevLatestIdRef.current) {
+      prevLatestIdRef.current = currentId
+      setHighlightedId(currentId)
+      const timer = setTimeout(() => setHighlightedId(null), 3000)
+      return () => clearTimeout(timer)
+    }
+  }, [latestParticipant, isLatestFromToday])
+
+  const filtered = useMemo(() => {
+    if (filterType === 'all') return sorted
+    return sorted.filter((p) => (p.user_type || 'guest').toLowerCase() === filterType)
+  }, [sorted, filterType])
+
+  return (
+    <div className="flex flex-col flex-1 min-h-0 overflow-hidden bg-white dark:bg-neutral-900">
+      {/* Header & Filter */}
+      <div className="px-3 3xl:px-5 py-2 3xl:py-3 bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 flex flex-wrap items-center justify-between gap-2 shrink-0 transition-colors">
+        <div className="flex items-center gap-1.5">
+          <h3 className="font-semibold text-xs sm:text-sm 3xl:text-xl text-neutral-800 dark:text-neutral-100">
+            ผู้ Check-in
+          </h3>
+          <span className="px-2 py-0.5 3xl:px-3 3xl:py-1 rounded-full text-[11px] 3xl:text-base font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">
+            {filtered.length}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-1 bg-neutral-100 dark:bg-neutral-800 p-0.5 rounded-lg text-xs 3xl:text-base">
+          {FILTER_TABS.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setFilterType(tab.key)}
+              className={`px-2 py-1 3xl:px-3 3xl:py-1.5 rounded-md text-[11px] 3xl:text-sm font-medium transition-colors cursor-pointer ${
+                filterType === tab.key
+                  ? `bg-white dark:bg-neutral-950 ${tab.color} shadow-xs font-semibold`
+                  : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-white'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {filtered.length === 0 ? (
+        <div className="flex-1 flex items-center justify-center p-8 text-center text-neutral-400 dark:text-neutral-500">
+          <div>
+            <Users className="w-8 h-8 3xl:w-12 3xl:h-12 text-neutral-300 dark:text-neutral-600 mx-auto mb-2" />
+            <p className="text-sm 3xl:text-xl">
+              {participants.length === 0
+                ? 'ยังไม่มีผู้ลงทะเบียน'
+                : 'ไม่พบผู้เข้าร่วมในกลุ่มที่เลือก'}
+            </p>
+          </div>
+        </div>
+      ) : (
+        <div className="overflow-y-auto flex-1 bg-white dark:bg-neutral-900">
+          {filtered.map((p) => {
+            const isSelected = p.regis_id === selectedId
+            const isHighlighted = p.regis_id === highlightedId
+            const time = p.regis_date
+              ? new Date(p.regis_date).toLocaleTimeString('th-TH', {
+                  hour: '2-digit', minute: '2-digit', second: '2-digit',
+                })
+              : ''
+
+            return (
+              <div
+                key={p.regis_id}
+                onClick={() => onSelect(p)}
+                className={`flex items-center gap-2.5 3xl:gap-4 px-3 3xl:px-5 py-2.5 3xl:py-4 border-b border-neutral-100 dark:border-neutral-800 cursor-pointer transition-all duration-300 ${
+                  isSelected
+                    ? 'bg-primary-light/90 dark:bg-primary/10 border-l-4 border-l-primary'
+                    : isHighlighted
+                    ? 'bg-indigo-50/90 dark:bg-indigo-950/30 border-l-4 border-l-primary shadow-xs animate-glow'
+                    : 'hover:bg-neutral-50 dark:hover:bg-neutral-800/50'
+                }`}
+              >
+                {/* Avatar */}
+                <div className="relative shrink-0">
+                  <div className="w-8 h-8 3xl:w-12 3xl:h-12 rounded-full bg-primary-light dark:bg-primary/20 text-primary dark:text-indigo-300 font-bold text-xs 3xl:text-lg flex items-center justify-center">
+                    {getInitial(p.participant_name)}
+                  </div>
+                  <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 3xl:w-3.5 3xl:h-3.5 rounded-full border-2 border-white dark:border-neutral-900 ${TYPE_DOT[p.user_type] || TYPE_DOT.guest}`} />
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-sm 3xl:text-xl font-medium text-neutral-800 dark:text-neutral-100 truncate">
+                      {p.participant_name}
+                    </span>
+                    {isHighlighted && (
+                      <span className="px-1.5 py-0.5 text-[10px] 3xl:text-xs font-bold bg-primary text-white rounded-full flex items-center gap-0.5 shrink-0 shadow-xs animate-bounce">
+                        <Sparkles className="w-2.5 h-2.5 3xl:w-3 3xl:h-3" /> ล่าสุด
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[11px] 3xl:text-sm text-neutral-500 dark:text-neutral-400 truncate">
+                    {p.user_department || '-'}
+                  </p>
+                </div>
+
+                {/* Time */}
+                <span className="text-[11px] 3xl:text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap shrink-0">
+                  {time}
+                </span>
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
