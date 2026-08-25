@@ -56,18 +56,18 @@ function StatCard({ icon: Icon, label, value, color, bgColor, iconBg }) {
 
   return (
     <div
-      className={`${bgColor} rounded-3xl p-3.5 sm:p-4 2xl:p-5 3xl:p-8 border border-neutral-200/80 dark:border-neutral-800 shadow-xs hover:shadow-sm transition-all flex items-center justify-between gap-3 flex-1 relative overflow-hidden`}
+      className={`${bgColor} rounded-3xl px-6 py-5 sm:px-7 sm:py-5.5 2xl:px-8 2xl:py-6.5 3xl:px-12 3xl:py-9 border border-neutral-200/80 dark:border-neutral-800 shadow-xs hover:shadow-sm transition-all flex items-center justify-between gap-4 sm:gap-5 3xl:gap-8 flex-1 relative overflow-hidden`}
     >
       <div className="min-w-0 flex-1 relative z-10">
-        <p className={`text-xs sm:text-sm 2xl:text-base 3xl:text-2xl font-black ${color} truncate mb-0.5 3xl:mb-1.5`}>
+        <p className={`text-sm sm:text-base 2xl:text-lg 3xl:text-3xl font-black ${color} truncate mb-1 sm:mb-1.5 3xl:mb-2.5`}>
           {label}
         </p>
-        <p className="text-xl sm:text-2xl 2xl:text-4xl 3xl:text-6xl font-black text-neutral-800 dark:text-neutral-100 tracking-tight leading-tight">
+        <p className="text-2xl sm:text-3xl 2xl:text-5xl 3xl:text-7xl font-black text-neutral-800 dark:text-neutral-100 tracking-tight leading-none">
           {displayValue.toLocaleString()}
         </p>
       </div>
-      <div className={`p-2.5 sm:p-3 2xl:p-3.5 3xl:p-5 rounded-2xl ${iconBg} ${color} shrink-0 relative z-10`}>
-        <Icon className="w-5 h-5 sm:w-6 sm:h-6 2xl:w-8 2xl:h-8 3xl:w-12 3xl:h-12" />
+      <div className={`p-3.5 sm:p-4 2xl:p-4.5 3xl:p-6 rounded-2xl ${iconBg} ${color} shrink-0 relative z-10`}>
+        <Icon className="w-6 h-6 sm:w-7 sm:h-7 2xl:w-9 2xl:h-9 3xl:w-14 3xl:h-14" />
       </div>
     </div>
   )
@@ -79,7 +79,7 @@ export default function LeftPanel({ event, summary }) {
   return (
     <div className="h-full flex flex-col md:flex-row p-3.5 sm:p-5 2xl:p-6 3xl:p-10 bg-slate-50/50 dark:bg-gray-950 transition-colors gap-3.5 sm:gap-5 3xl:gap-8 lg:overflow-hidden">
       {/* Left Column: 4 Stat Cards Stack */}
-      <div className="w-full md:w-[36%] lg:w-[32%] xl:w-[30%] shrink-0 flex flex-col gap-2.5 sm:gap-3.5 3xl:gap-5">
+      <div className="w-full md:w-[40%] lg:w-[36%] xl:w-[34%] shrink-0 flex flex-col gap-3 sm:gap-4 3xl:gap-6">
         <StatCard
           icon={Users}
           label="ผู้เข้าร่วมทั้งหมด"
