@@ -15,7 +15,7 @@ import {
 } from '../utils/helpers'
 import {
   ArrowLeft, ScanFace, RefreshCw, Maximize, Minimize,
-  Sun, Moon, Wifi, WifiOff,
+  Sun, Moon, Wifi, WifiOff, Menu, X, Clock,
 } from 'lucide-react'
 
 export default function MainPage() {
@@ -136,6 +136,7 @@ export default function MainPage() {
     refetch: refetchDetail,
   } = useParticipants(selectedEventId)
   const [selectedParticipant, setSelectedParticipant] = useState(null)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const handleDetailRefresh = useCallback(() => { refetchDetail(true) }, [refetchDetail])
   const { secondsLeft, isActive, toggle } = useAutoRefresh(handleDetailRefresh, 5000, true)
@@ -148,8 +149,11 @@ export default function MainPage() {
   const isSelectedParticipant = selectedParticipant !== null && selectedParticipant.regis_id !== latestParticipant?.regis_id
   const displayParticipant = selectedParticipant || latestParticipant
 
-  // Reset selection when switching events
-  useEffect(() => { setSelectedParticipant(null) }, [selectedEventId])
+  // Reset selection & mobile menu when switching events
+  useEffect(() => {
+    setSelectedParticipant(null)
+    setIsMobileMenuOpen(false)
+  }, [selectedEventId])
 
   // Find selected event info for header
   const selectedEvent = events.find((e) => e.event_id === selectedEventId)
@@ -197,45 +201,122 @@ export default function MainPage() {
     return (
       <div className={`min-h-screen lg:h-[100dvh] flex flex-col bg-slate-50 dark:bg-gray-950 lg:overflow-hidden transition-colors duration-200 ${viewTransition}`}>
         {/* Header */}
-        <header className="bg-primary text-white px-3.5 sm:px-6 3xl:px-10 py-3 sm:py-3.5 3xl:py-6 flex items-center justify-between shadow-lg shrink-0">
-          <div className="flex items-center gap-2.5 sm:gap-4 3xl:gap-6 min-w-0 flex-1 mr-2">
-            <button
-              onClick={exitDetail}
-              className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer shrink-0"
-              title="กลับไปรายการกิจกรรม"
-            >
-              <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6 3xl:w-9 3xl:h-9" />
-            </button>
-            <div className="flex items-center gap-2.5 3xl:gap-4 min-w-0 flex-1">
-              <ScanFace className="w-6 h-6 sm:w-7 sm:h-7 3xl:w-11 3xl:h-11 shrink-0" />
+        <header className="bg-primary text-white px-3 sm:px-6 3xl:px-10 py-2.5 sm:py-3.5 3xl:py-6 shadow-lg shrink-0 relative z-30">
+          <div className="flex items-center justify-between gap-2 sm:gap-4 3xl:gap-6">
+            {/* Back Button + Title with Maximum Width */}
+            <div className="flex items-center gap-2 sm:gap-4 3xl:gap-6 min-w-0 flex-1">
+              <button
+                onClick={exitDetail}
+                className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/15 active:scale-95 transition-all cursor-pointer shrink-0"
+                title="กลับไปรายการกิจกรรม"
+              >
+                <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6 3xl:w-9 3xl:h-9" />
+              </button>
+
+              <div className="hidden sm:block p-2 sm:p-2.5 3xl:p-3.5 bg-white/10 rounded-2xl shrink-0">
+                <ScanFace className="w-5 h-5 sm:w-6 sm:h-6 3xl:w-10 3xl:h-10" />
+              </div>
+
               <div className="min-w-0 flex-1">
-                <h1 className="font-extrabold text-base sm:text-xl 2xl:text-2xl 3xl:text-5xl leading-tight truncate">
+                <h1 className="font-black text-sm sm:text-xl 2xl:text-2xl 3xl:text-5xl leading-tight truncate">
                   {event?.event_title || selectedEvent?.event_title || 'Live Check-in'}
                 </h1>
-                <p className="text-white/85 text-xs sm:text-sm 2xl:text-base 3xl:text-2xl truncate mt-0.5">
+                <p className="text-white/85 text-[11px] sm:text-sm 2xl:text-base 3xl:text-2xl truncate mt-0.5">
                   {(event?.event_addr || selectedEvent?.event_addr) ? `${event?.event_addr || selectedEvent?.event_addr} • ` : ''}
                   {formatTime(event?.event_time_start || selectedEvent?.event_time_start)} - {formatTime(event?.event_time_stop || selectedEvent?.event_time_stop)} น.
                 </p>
               </div>
             </div>
+
+            {/* Desktop Action Buttons (hidden on mobile) */}
+            <div className="hidden sm:flex items-center gap-1.5 sm:gap-2.5 3xl:gap-4 shrink-0">
+              <button onClick={() => refetchDetail(false)} className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer" title="รีเฟรช">
+                <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 ${isRefreshing ? 'animate-spin' : ''}`} />
+              </button>
+              <button onClick={toggleFullscreen} className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer" title={isFullscreen ? 'ออกจากเต็มจอ' : 'เต็มจอ'}>
+                {isFullscreen ? <Minimize className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7" /> : <Maximize className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7" />}
+              </button>
+              <button onClick={toggleTheme} className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer" title={isDark ? 'ธีมสว่าง' : 'ธีมมืด'}>
+                {isDark ? <Moon className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 text-slate-200" /> : <Sun className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 text-yellow-300" />}
+              </button>
+              <button
+                onClick={toggle}
+                className={`px-3 py-1.5 sm:px-4 sm:py-2 3xl:px-6 3xl:py-3 rounded-xl text-xs sm:text-sm 2xl:text-base 3xl:text-xl font-bold transition-all cursor-pointer whitespace-nowrap ${isActive ? 'bg-white/25 shadow-inner' : 'bg-white/10 hover:bg-white/20'}`}
+              >
+                Auto {isActive ? `ON (${secondsLeft}s)` : 'OFF'}
+              </button>
+            </div>
+
+            {/* Mobile Actions: Compact Auto Countdown + Hamburger Button */}
+            <div className="flex sm:hidden items-center gap-1.5 shrink-0">
+              <button
+                onClick={toggle}
+                className={`px-2 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                  isActive ? 'bg-white/25 text-white shadow-inner' : 'bg-white/10 text-white/70'
+                }`}
+                title="สลับ Auto-refresh"
+              >
+                {isActive ? `${secondsLeft}s` : 'OFF'}
+              </button>
+
+              <button
+                onClick={() => setIsMobileMenuOpen((v) => !v)}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white transition-all cursor-pointer"
+                aria-label="เมนูการทำงาน"
+              >
+                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+            </div>
           </div>
-          <div className="flex items-center gap-1.5 sm:gap-2.5 3xl:gap-4 shrink-0">
-            <button onClick={() => refetchDetail(false)} className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer" title="รีเฟรช">
-              <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 ${isRefreshing ? 'animate-spin' : ''}`} />
-            </button>
-            <button onClick={toggleFullscreen} className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer hidden sm:flex" title={isFullscreen ? 'ออกจากเต็มจอ' : 'เต็มจอ'}>
-              {isFullscreen ? <Minimize className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7" /> : <Maximize className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7" />}
-            </button>
-            <button onClick={toggleTheme} className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer" title={isDark ? 'ธีมสว่าง' : 'ธีมมืด'}>
-              {isDark ? <Moon className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 text-slate-200" /> : <Sun className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 text-yellow-300" />}
-            </button>
-            <button
-              onClick={toggle}
-              className={`px-3 py-1.5 sm:px-4 sm:py-2 3xl:px-6 3xl:py-3 rounded-xl text-xs sm:text-sm 2xl:text-base 3xl:text-xl font-bold transition-all cursor-pointer whitespace-nowrap ${isActive ? 'bg-white/25 shadow-inner' : 'bg-white/10 hover:bg-white/20'}`}
-            >
-              Auto {isActive ? `ON (${secondsLeft}s)` : 'OFF'}
-            </button>
-          </div>
+
+          {/* Mobile Dropdown Menu Drawer */}
+          {isMobileMenuOpen && (
+            <div className="sm:hidden mt-2.5 pt-2.5 border-t border-white/15 space-y-1.5 animate-fade-in">
+              <button
+                onClick={() => {
+                  refetchDetail(false)
+                  setIsMobileMenuOpen(false)
+                }}
+                className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 active:bg-white/25 transition-all text-xs font-bold"
+              >
+                <span className="flex items-center gap-2">
+                  <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                  รีเฟรชข้อมูล
+                </span>
+                <span className="text-[10px] text-white/70">กดเพื่ออัปเดต</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  toggle()
+                  setIsMobileMenuOpen(false)
+                }}
+                className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 active:bg-white/25 transition-all text-xs font-bold"
+              >
+                <span className="flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  อัปเดตอัตโนมัติ (Auto Refresh)
+                </span>
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${isActive ? 'bg-green-500 text-white' : 'bg-neutral-600 text-white/70'}`}>
+                  {isActive ? `เปิด (${secondsLeft}s)` : 'ปิด'}
+                </span>
+              </button>
+
+              <button
+                onClick={() => {
+                  toggleTheme()
+                  setIsMobileMenuOpen(false)
+                }}
+                className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 active:bg-white/25 transition-all text-xs font-bold"
+              >
+                <span className="flex items-center gap-2">
+                  {isDark ? <Sun className="w-4 h-4 text-yellow-300" /> : <Moon className="w-4 h-4 text-slate-200" />}
+                  เปลี่ยนธีม ({isDark ? 'สว่าง' : 'มืด'})
+                </span>
+                <span className="text-[10px] text-white/70">{isDark ? 'โหมดมืด' : 'โหมดสว่าง'}</span>
+              </button>
+            </div>
+          )}
         </header>
 
         {/* Main Split: Left 70% / Right 30% — Mobile scrollable, Desktop 100vh */}
