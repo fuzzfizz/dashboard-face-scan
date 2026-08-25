@@ -57,17 +57,6 @@ function ReticleCorners({ color = 'border-primary/80 dark:border-cyan-400/80' })
   )
 }
 
-/* === Continuous Laser Scan Beam Overlay === */
-function LaserScanOverlay() {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-2xl z-10">
-      <div className="absolute left-0 right-0 h-1 sm:h-1.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_14px_#06b6d4] animate-laser-scan">
-        <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-cyan-400/15 to-transparent pointer-events-none" />
-      </div>
-    </div>
-  )
-}
-
 /* === Dual Rotating HUD Target Rings === */
 function HudTargetRings() {
   return (
@@ -272,10 +261,8 @@ export default function LeftPanel({
             QR Code สแกนเข้างาน
           </p>
 
-          {/* QR Code Container with Continuous Laser Beam */}
+          {/* QR Code Container */}
           <div className="relative flex-1 min-h-0 flex items-center justify-center p-2.5 sm:p-3.5 bg-white rounded-2xl shadow-xs border border-neutral-200/80 max-h-[190px] sm:max-h-[240px] 2xl:max-h-[300px] 3xl:max-h-[440px] aspect-square w-full overflow-hidden">
-            <LaserScanOverlay />
-
             {event?.qr_img ? (
               <img
                 src={event.qr_img}
@@ -323,9 +310,6 @@ export default function LeftPanel({
 
                 {/* Continuous Dual Rotating HUD Rings */}
                 <HudTargetRings />
-
-                {/* Laser scan beam overlay for avatar */}
-                <LaserScanOverlay />
 
                 {displayParticipant.participant_photo ? (
                   <img
