@@ -12,22 +12,28 @@ import {
 import QRCode from 'qrcode'
 import { getInitial } from '../../utils/helpers'
 
-function useCountUp(target, duration = 800) {
-  const [value, setValue] = useState(0)
+function useCountUp(target, duration = 600) {
+  const [value, setValue] = useState(target || 0)
+  const prevValueRef = useRef(target || 0)
   const rafRef = useRef(null)
 
   useEffect(() => {
-    if (target === 0) {
-      setValue(0)
-      return
-    }
+    const startVal = prevValueRef.current
+    if (startVal === target) return
+
     const start = performance.now()
     function tick(now) {
       const elapsed = now - start
       const progress = Math.min(elapsed / duration, 1)
       const eased = 1 - Math.pow(1 - progress, 3)
-      setValue(Math.round(eased * target))
-      if (progress < 1) rafRef.current = requestAnimationFrame(tick)
+      const current = Math.round(startVal + (target - startVal) * eased)
+      setValue(current)
+      prevValueRef.current = current
+      if (progress < 1) {
+        rafRef.current = requestAnimationFrame(tick)
+      } else {
+        prevValueRef.current = target
+      }
     }
     rafRef.current = requestAnimationFrame(tick)
     return () => {
@@ -43,18 +49,18 @@ function StatCard({ icon: Icon, label, value, color, bgColor, iconBg }) {
 
   return (
     <div
-      className={`${bgColor} rounded-2xl p-3 sm:p-4 2xl:p-5 3xl:p-7 border border-neutral-200/80 dark:border-neutral-800 shadow-xs hover:shadow-sm transition-all flex items-center justify-between gap-3 shrink-0`}
+      className={`${bgColor} rounded-2xl p-3 sm:p-4 2xl:p-5 3xl:p-7 border border-neutral-200/80 dark:border-neutral-800 shadow-xs hover:shadow-sm transition-all flex items-center justify-between gap-2.5 sm:gap-3 shrink-0`}
     >
       <div className="min-w-0 flex-1">
         <p className={`text-xs sm:text-sm 2xl:text-base 3xl:text-2xl font-black ${color} truncate mb-0.5 3xl:mb-1.5`}>
           {label}
         </p>
-        <p className="text-2xl sm:text-3xl 2xl:text-4xl 3xl:text-7xl font-black text-neutral-800 dark:text-neutral-100 tracking-tight leading-tight">
+        <p className="text-xl sm:text-2xl 2xl:text-4xl 3xl:text-7xl font-black text-neutral-800 dark:text-neutral-100 tracking-tight leading-tight">
           {displayValue.toLocaleString()}
         </p>
       </div>
-      <div className={`p-2.5 sm:p-3 2xl:p-4 3xl:p-5 rounded-2xl ${iconBg} ${color} shrink-0`}>
-        <Icon className="w-5 h-5 sm:w-7 sm:h-7 2xl:w-8 2xl:h-8 3xl:w-12 3xl:h-12" />
+      <div className={`p-2 sm:p-2.5 2xl:p-3.5 3xl:p-5 rounded-2xl ${iconBg} ${color} shrink-0`}>
+        <Icon className="w-4 h-4 sm:w-6 sm:h-6 2xl:w-8 2xl:h-8 3xl:w-12 3xl:h-12" />
       </div>
     </div>
   )
@@ -80,7 +86,7 @@ export default function LeftPanel({
     }
   }, [displayParticipant, isSelectedParticipant])
 
-  // Generate & download high-res PNG locally without network or tab navigation
+  // Multi-tier QR Code downloader
   const handleSaveQR = useCallback(async () => {
     if (!event) return
     const cleanTitle = (event.event_title || 'event').replace(/[^\w\u0E00-\u0E7F-]/g, '_')
@@ -142,8 +148,8 @@ export default function LeftPanel({
   }
 
   return (
-    <div className="h-full flex flex-col p-3 sm:p-4 2xl:p-5 3xl:p-8 bg-slate-50/50 dark:bg-gray-950 transition-colors gap-3 sm:gap-3.5 3xl:gap-6 overflow-hidden">
-      {/* 4 Stat Cards — Larger, bolder, more prominent numbers and labels */}
+    <div className="h-full flex flex-col p-3.5 sm:p-4 2xl:p-5 3xl:p-8 bg-slate-50/50 dark:bg-gray-950 transition-colors gap-3.5 sm:gap-4 3xl:gap-6 lg:overflow-hidden">
+      {/* 4 Stat Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 3xl:gap-5 shrink-0">
         <StatCard
           icon={Users}
@@ -180,15 +186,14 @@ export default function LeftPanel({
       </div>
 
       {/* QR Code Card + Participant Info Card */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-3.5 3xl:gap-6 flex-1 min-h-0 overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4 3xl:gap-6 flex-1 min-h-0 lg:overflow-hidden">
         {/* QR Code Card */}
-        <div className="h-full flex flex-col items-center justify-center bg-white dark:bg-neutral-900 rounded-3xl p-4 sm:p-5 2xl:p-6 3xl:p-9 border border-neutral-200/80 dark:border-neutral-800 shadow-sm overflow-hidden">
-          {/* Larger Title */}
-          <p className="text-lg sm:text-xl 2xl:text-3xl 3xl:text-4xl font-black text-neutral-800 dark:text-neutral-100 mb-2 sm:mb-3 3xl:mb-5 shrink-0 text-center tracking-tight">
+        <div className="flex flex-col items-center justify-center bg-white dark:bg-neutral-900 rounded-3xl p-4 sm:p-5 2xl:p-6 3xl:p-9 border border-neutral-200/80 dark:border-neutral-800 shadow-sm min-h-[260px] sm:min-h-0">
+          <p className="text-base sm:text-lg 2xl:text-2xl 3xl:text-4xl font-black text-neutral-800 dark:text-neutral-100 mb-2 sm:mb-3 3xl:mb-5 shrink-0 text-center tracking-tight">
             QR Code สแกนเข้างาน
           </p>
 
-          <div className="flex-1 min-h-0 flex items-center justify-center p-2.5 sm:p-3.5 bg-white rounded-2xl shadow-xs border border-neutral-200/80 max-h-[220px] sm:max-h-[270px] 2xl:max-h-[340px] 3xl:max-h-[460px] aspect-square w-full">
+          <div className="flex-1 min-h-0 flex items-center justify-center p-2.5 sm:p-3.5 bg-white rounded-2xl shadow-xs border border-neutral-200/80 max-h-[190px] sm:max-h-[240px] 2xl:max-h-[300px] 3xl:max-h-[440px] aspect-square w-full">
             {event?.qr_img ? (
               <img
                 src={event.qr_img}
@@ -215,7 +220,7 @@ export default function LeftPanel({
 
         {/* Participant Info Card */}
         <div
-          className={`h-full flex flex-col items-center justify-center bg-white dark:bg-neutral-900 rounded-3xl p-4 sm:p-5 2xl:p-6 3xl:p-9 border shadow-sm transition-all duration-300 overflow-hidden ${
+          className={`flex flex-col items-center justify-center bg-white dark:bg-neutral-900 rounded-3xl p-4 sm:p-5 2xl:p-6 3xl:p-9 border shadow-sm transition-all duration-300 min-h-[260px] sm:min-h-0 ${
             isNewScan
               ? 'border-primary ring-4 sm:ring-8 ring-primary/20 shadow-xl animate-glow'
               : 'border-neutral-200/80 dark:border-neutral-800'
@@ -233,7 +238,7 @@ export default function LeftPanel({
                   <img
                     src={displayParticipant.participant_photo}
                     alt={displayParticipant.participant_name}
-                    className="w-20 h-20 sm:w-24 sm:h-24 2xl:w-32 2xl:h-32 3xl:w-48 3xl:h-48 rounded-full object-cover shadow-xl ring-4 sm:ring-6 ring-primary/20"
+                    className="w-18 h-18 sm:w-22 sm:h-22 2xl:w-28 2xl:h-28 3xl:w-44 3xl:h-44 rounded-full object-cover shadow-xl ring-4 sm:ring-6 ring-primary/20"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none'
                       if (e.currentTarget.nextElementSibling) {
@@ -243,7 +248,7 @@ export default function LeftPanel({
                   />
                 ) : null}
                 <div
-                  className={`w-20 h-20 sm:w-24 sm:h-24 2xl:w-32 2xl:h-32 3xl:w-48 3xl:h-48 rounded-full bg-primary-light dark:bg-primary/20 text-primary dark:text-indigo-300 font-black text-3xl sm:text-4xl 2xl:text-5xl 3xl:text-7xl items-center justify-center ring-4 sm:ring-6 ring-primary/20 shadow-xl ${
+                  className={`w-18 h-18 sm:w-22 sm:h-22 2xl:w-28 2xl:h-28 3xl:w-44 3xl:h-44 rounded-full bg-primary-light dark:bg-primary/20 text-primary dark:text-indigo-300 font-black text-2xl sm:text-3xl 2xl:text-4xl 3xl:text-6xl items-center justify-center ring-4 sm:ring-6 ring-primary/20 shadow-xl ${
                     displayParticipant.participant_photo ? 'hidden' : 'flex'
                   }`}
                 >
@@ -252,14 +257,14 @@ export default function LeftPanel({
               </div>
 
               {/* Participant Name */}
-              <p className="text-xl sm:text-2xl 2xl:text-3xl 3xl:text-5xl font-black text-neutral-800 dark:text-neutral-100 mb-1.5 sm:mb-2 3xl:mb-3.5 leading-snug truncate max-w-full px-2">
+              <p className="text-lg sm:text-xl 2xl:text-2xl 3xl:text-4xl font-black text-neutral-800 dark:text-neutral-100 mb-1 sm:mb-1.5 3xl:mb-3 leading-snug truncate max-w-full px-2">
                 {displayParticipant.participant_name}
               </p>
 
               {/* User Type Badge */}
               {displayParticipant.user_type && (
                 <span
-                  className={`inline-block px-3.5 py-1 sm:px-4 sm:py-1.5 3xl:px-6 3xl:py-2 rounded-full text-xs sm:text-sm 2xl:text-base 3xl:text-xl font-black border mb-2 sm:mb-2.5 3xl:mb-5 shadow-2xs shrink-0 ${
+                  className={`inline-block px-3.5 py-0.5 sm:px-4 sm:py-1 3xl:px-6 3xl:py-2 rounded-full text-xs sm:text-sm 2xl:text-base 3xl:text-xl font-black border mb-2 sm:mb-2.5 3xl:mb-4 shadow-2xs shrink-0 ${
                     typeBadge[displayParticipant.user_type]?.class || typeBadge.guest.class
                   }`}
                 >
@@ -268,23 +273,23 @@ export default function LeftPanel({
               )}
 
               {/* Meta Details */}
-              <div className="space-y-1 sm:space-y-1.5 3xl:space-y-3 text-xs sm:text-sm 2xl:text-base 3xl:text-2xl text-neutral-600 dark:text-neutral-300">
+              <div className="space-y-1 sm:space-y-1.5 3xl:space-y-2.5 text-xs sm:text-sm 2xl:text-base 3xl:text-xl text-neutral-600 dark:text-neutral-300">
                 <p className="flex items-center justify-center gap-1.5">
-                  <Building className="w-4 h-4 2xl:w-5 2xl:h-5 3xl:w-7 3xl:h-7 text-neutral-400 shrink-0" />
-                  <span className="truncate max-w-[260px] sm:max-w-md font-medium">{displayParticipant.user_department || '-'}</span>
+                  <Building className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 3xl:w-6 3xl:h-6 text-neutral-400 shrink-0" />
+                  <span className="truncate max-w-[240px] sm:max-w-md font-medium">{displayParticipant.user_department || '-'}</span>
                 </p>
                 <p className="flex items-center justify-center gap-1.5 font-black text-neutral-800 dark:text-neutral-100">
-                  <Clock className="w-4 h-4 2xl:w-5 2xl:h-5 3xl:w-7 3xl:h-7 text-primary shrink-0" />
+                  <Clock className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 3xl:w-6 3xl:h-6 text-primary shrink-0" />
                   <span>เวลาสแกน: {scanTime}</span>
                 </p>
               </div>
             </div>
           ) : (
-            <div className="text-center p-6">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 3xl:w-28 3xl:h-28 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mx-auto mb-3 3xl:mb-4 animate-pulse">
-                <User className="w-8 h-8 sm:w-10 sm:h-10 3xl:w-14 3xl:h-14 text-neutral-400" />
+            <div className="text-center p-4">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 3xl:w-24 3xl:h-24 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mx-auto mb-2.5 sm:mb-3 3xl:mb-4 animate-pulse">
+                <User className="w-7 h-7 sm:w-8 sm:h-8 3xl:w-12 3xl:h-12 text-neutral-400" />
               </div>
-              <p className="text-sm sm:text-base 2xl:text-xl 3xl:text-2xl text-neutral-400 dark:text-neutral-500 font-bold">
+              <p className="text-xs sm:text-sm 2xl:text-base 3xl:text-xl text-neutral-400 dark:text-neutral-500 font-bold">
                 รอผู้เข้าร่วมสแกนเข้างาน...
               </p>
             </div>

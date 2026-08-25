@@ -127,10 +127,17 @@ export default function MainPage() {
   const listLoading = eventsLoading || summaryLoading
 
   // ========== Event Detail State ==========
-  const { event, summary, participants, loading: detailLoading, refetch: refetchDetail } = useParticipants(selectedEventId)
+  const {
+    event,
+    summary,
+    participants,
+    loading: detailLoading,
+    isRefreshing,
+    refetch: refetchDetail,
+  } = useParticipants(selectedEventId)
   const [selectedParticipant, setSelectedParticipant] = useState(null)
 
-  const handleDetailRefresh = useCallback(() => { refetchDetail() }, [refetchDetail])
+  const handleDetailRefresh = useCallback(() => { refetchDetail(true) }, [refetchDetail])
   const { secondsLeft, isActive, toggle } = useAutoRefresh(handleDetailRefresh, 5000, true)
 
   // Latest participant vs Selected participant
@@ -175,7 +182,7 @@ export default function MainPage() {
 
   // ========== RENDER: Event Detail View ==========
   if (selectedEventId) {
-    // Loading state
+    // Initial Loading state
     if (detailLoading && participants.length === 0) {
       return (
         <div className="min-h-screen bg-slate-50 dark:bg-gray-950 flex items-center justify-center transition-colors">
@@ -188,7 +195,7 @@ export default function MainPage() {
     }
 
     return (
-      <div className={`h-[100dvh] flex flex-col bg-slate-50 dark:bg-gray-950 overflow-hidden transition-colors duration-200 ${viewTransition}`}>
+      <div className={`min-h-screen lg:h-[100dvh] flex flex-col bg-slate-50 dark:bg-gray-950 lg:overflow-hidden transition-colors duration-200 ${viewTransition}`}>
         {/* Header */}
         <header className="bg-primary text-white px-3.5 sm:px-6 3xl:px-10 py-3 sm:py-3.5 3xl:py-6 flex items-center justify-between shadow-lg shrink-0">
           <div className="flex items-center gap-2.5 sm:gap-4 3xl:gap-6 min-w-0 flex-1 mr-2">
@@ -213,10 +220,10 @@ export default function MainPage() {
             </div>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-2.5 3xl:gap-4 shrink-0">
-            <button onClick={handleDetailRefresh} className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer" title="รีเฟรช">
-              <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 ${detailLoading ? 'animate-spin' : ''}`} />
+            <button onClick={() => refetchDetail(false)} className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer" title="รีเฟรช">
+              <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 ${isRefreshing ? 'animate-spin' : ''}`} />
             </button>
-            <button onClick={toggleFullscreen} className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer" title={isFullscreen ? 'ออกจากเต็มจอ' : 'เต็มจอ'}>
+            <button onClick={toggleFullscreen} className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer hidden sm:flex" title={isFullscreen ? 'ออกจากเต็มจอ' : 'เต็มจอ'}>
               {isFullscreen ? <Minimize className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7" /> : <Maximize className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7" />}
             </button>
             <button onClick={toggleTheme} className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer" title={isDark ? 'ธีมสว่าง' : 'ธีมมืด'}>
@@ -231,9 +238,9 @@ export default function MainPage() {
           </div>
         </header>
 
-        {/* Main Split: Left 70% / Right 30% */}
-        <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
-          <div className="w-full lg:w-[70%] border-b lg:border-b-0 lg:border-r border-neutral-200 dark:border-neutral-800 shrink-0 overflow-hidden">
+        {/* Main Split: Left 70% / Right 30% — Mobile scrollable, Desktop 100vh */}
+        <div className="flex flex-col lg:flex-row flex-1 lg:overflow-hidden">
+          <div className="w-full lg:w-[70%] border-b lg:border-b-0 lg:border-r border-neutral-200 dark:border-neutral-800 shrink-0 lg:overflow-hidden">
             <LeftPanel
               event={event || selectedEvent}
               summary={summary}
@@ -241,7 +248,7 @@ export default function MainPage() {
               isSelectedParticipant={isSelectedParticipant}
             />
           </div>
-          <div className="w-full lg:w-[30%] flex-1 min-h-0 flex flex-col">
+          <div className="w-full lg:w-[30%] min-h-[480px] lg:min-h-0 flex-1 flex flex-col lg:overflow-hidden">
             <RightPanel
               participants={participants}
               summary={summary}
