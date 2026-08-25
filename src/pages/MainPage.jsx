@@ -15,7 +15,7 @@ import {
 } from '../utils/helpers'
 import {
   ArrowLeft, ScanFace, RefreshCw, Maximize, Minimize,
-  Sun, Moon, Wifi, WifiOff, Menu, X, Clock,
+  Sun, Moon, Menu, X, Clock,
 } from 'lucide-react'
 
 export default function MainPage() {
@@ -362,15 +362,16 @@ export default function MainPage() {
           <div className="flex items-center gap-3">
             <span className="truncate font-medium">สแกนล่าสุด: {lastScanTime}</span>
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 font-bold">
             {!isOnline ? (
-              <span className="flex items-center gap-1.5 text-red-600 dark:text-red-400 font-bold">
-                <WifiOff className="w-4 h-4 3xl:w-6 3xl:h-6" /> ออฟไลน์
+              <span className="flex items-center gap-1.5 text-red-600 dark:text-red-400">
+                <span className="w-2.5 h-2.5 3xl:w-3.5 3xl:h-3.5 rounded-full bg-red-500" />
+                <span>ออฟไลน์</span>
               </span>
             ) : (
-              <span className="flex items-center gap-1.5 text-green-600 dark:text-green-400 font-bold">
+              <span className="flex items-center gap-1.5 text-green-600 dark:text-green-400">
                 <span className="w-2.5 h-2.5 3xl:w-3.5 3xl:h-3.5 rounded-full bg-green-500 animate-pulse" />
-                <Wifi className="w-4 h-4 3xl:w-6 3xl:h-6" /> เชื่อมต่อแล้ว
+                <span>เชื่อมต่อแล้ว</span>
               </span>
             )}
           </div>
