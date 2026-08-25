@@ -9,6 +9,7 @@ import {
   Building,
   User,
 } from 'lucide-react'
+import QRCode from 'qrcode'
 import { getInitial } from '../../utils/helpers'
 
 function useCountUp(target, duration = 800) {
@@ -79,67 +80,42 @@ export default function LeftPanel({
     }
   }, [displayParticipant, isSelectedParticipant])
 
-  // Multi-tier QR Code downloader
+  // Generate & download high-res PNG locally without network or tab navigation
   const handleSaveQR = useCallback(async () => {
-    if (!event?.qr_img) return
-    const cleanTitle = (event.event_title || 'event').replace(/[\s/\\?%*:|"<>]/g, '_')
+    if (!event) return
+    const cleanTitle = (event.event_title || 'event').replace(/[^\w\u0E00-\u0E7F-]/g, '_')
     const fileName = `QR-${cleanTitle}.png`
 
-    // Method 1: Fetch + Blob download
     try {
-      const response = await fetch(event.qr_img, { mode: 'cors' })
-      if (response.ok) {
-        const blob = await response.blob()
-        const url = URL.createObjectURL(blob)
+      if (event.qr_img && event.qr_img.startsWith('data:')) {
         const a = document.createElement('a')
-        a.href = url
+        a.href = event.qr_img
         a.download = fileName
         document.body.appendChild(a)
         a.click()
         document.body.removeChild(a)
-        setTimeout(() => URL.revokeObjectURL(url), 1000)
         return
       }
-    } catch (err) {
-      console.warn('Direct fetch QR failed, attempting canvas conversion...', err)
-    }
 
-    // Method 2: Image + Canvas
-    try {
-      const img = new Image()
-      img.crossOrigin = 'anonymous'
-      img.src = event.qr_img + (event.qr_img.includes('?') ? '&' : '?') + 't=' + Date.now()
-      await new Promise((resolve, reject) => {
-        img.onload = resolve
-        img.onerror = reject
+      const qrData = event.qr_img || `EVENT-${event.event_id || 'CHECKIN'}`
+      const dataUrl = await QRCode.toDataURL(qrData, {
+        width: 1024,
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#ffffff',
+        },
       })
-      const canvas = document.createElement('canvas')
-      canvas.width = img.naturalWidth || 600
-      canvas.height = img.naturalHeight || 600
-      const ctx = canvas.getContext('2d')
-      ctx.fillStyle = '#ffffff'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
-      ctx.drawImage(img, 0, 0)
-      const dataUrl = canvas.toDataURL('image/png')
+
       const a = document.createElement('a')
       a.href = dataUrl
       a.download = fileName
       document.body.appendChild(a)
       a.click()
       document.body.removeChild(a)
-      return
-    } catch (err2) {
-      console.warn('Canvas conversion failed, fallback to direct link...', err2)
+    } catch (err) {
+      console.error('Failed to generate/download QR Code:', err)
     }
-
-    // Method 3: Direct anchor click
-    const a = document.createElement('a')
-    a.href = event.qr_img
-    a.target = '_blank'
-    a.download = fileName
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
   }, [event])
 
   const scanTime = displayParticipant?.regis_date

@@ -85,20 +85,15 @@ export default function MainPage() {
   const handleFilterModeChange = (mode) => {
     setFilterMode(mode)
     if (mode === 'single') {
-      // If switching to single mode, set both to startDate (or today)
-      const target = startDate || today
-      setStartDate(target)
-      setEndDate(target)
-      setActivePreset(target === today ? 'today' : target === getDaysAgo(1) ? 'yesterday' : 'custom')
+      // Always default to today when switching to single date mode
+      setStartDate(today)
+      setEndDate(today)
+      setActivePreset('today')
     } else {
-      // If switching to range mode and dates are same, default to 7 days
-      if (startDate === endDate) {
-        setStartDate(getDaysAgo(6))
-        setEndDate(today)
-        setActivePreset('7days')
-      } else {
-        setActivePreset('custom')
-      }
+      // Default to 7 days range when switching to range mode
+      setStartDate(getDaysAgo(6))
+      setEndDate(today)
+      setActivePreset('7days')
     }
   }
 
