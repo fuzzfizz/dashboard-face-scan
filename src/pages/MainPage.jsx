@@ -139,7 +139,7 @@ export default function MainPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const handleDetailRefresh = useCallback(() => { refetchDetail(true) }, [refetchDetail])
-  const { secondsLeft, isActive, toggle } = useAutoRefresh(handleDetailRefresh, 5000, true)
+  useAutoRefresh(handleDetailRefresh, 5000, true)
 
   // Latest participant vs Selected participant
   const sorted = useMemo(() => {
@@ -229,36 +229,32 @@ export default function MainPage() {
             </div>
 
             {/* Desktop Action Buttons (hidden on mobile) */}
-            <div className="hidden sm:flex items-center gap-1.5 sm:gap-2.5 3xl:gap-4 shrink-0">
-              <button onClick={() => refetchDetail(false)} className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer" title="รีเฟรช">
+            <div className="hidden sm:flex items-center gap-2 sm:gap-3 3xl:gap-4 shrink-0">
+              <button
+                onClick={() => refetchDetail(false)}
+                className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
+                title="รีเฟรชข้อมูล"
+              >
                 <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 ${isRefreshing ? 'animate-spin' : ''}`} />
               </button>
-              <button onClick={toggleFullscreen} className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer" title={isFullscreen ? 'ออกจากเต็มจอ' : 'เต็มจอ'}>
+              <button
+                onClick={toggleFullscreen}
+                className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
+                title={isFullscreen ? 'ออกจากเต็มจอ' : 'เต็มจอ'}
+              >
                 {isFullscreen ? <Minimize className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7" /> : <Maximize className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7" />}
               </button>
-              <button onClick={toggleTheme} className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer" title={isDark ? 'ธีมสว่าง' : 'ธีมมืด'}>
-                {isDark ? <Moon className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 text-slate-200" /> : <Sun className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 text-yellow-300" />}
-              </button>
               <button
-                onClick={toggle}
-                className={`px-3 py-1.5 sm:px-4 sm:py-2 3xl:px-6 3xl:py-3 rounded-xl text-xs sm:text-sm 2xl:text-base 3xl:text-xl font-bold transition-all cursor-pointer whitespace-nowrap ${isActive ? 'bg-white/25 shadow-inner' : 'bg-white/10 hover:bg-white/20'}`}
+                onClick={toggleTheme}
+                className="p-2 sm:p-2.5 3xl:p-3.5 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
+                title={isDark ? 'ธีมสว่าง' : 'ธีมมืด'}
               >
-                Auto {isActive ? `ON (${secondsLeft}s)` : 'OFF'}
+                {isDark ? <Moon className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 text-slate-200" /> : <Sun className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-7 3xl:h-7 text-yellow-300" />}
               </button>
             </div>
 
-            {/* Mobile Actions: Compact Auto Countdown + Hamburger Button */}
+            {/* Mobile Actions: Hamburger Button */}
             <div className="flex sm:hidden items-center gap-1.5 shrink-0">
-              <button
-                onClick={toggle}
-                className={`px-2 py-1 rounded-lg text-[11px] font-bold transition-all ${
-                  isActive ? 'bg-white/25 text-white shadow-inner' : 'bg-white/10 text-white/70'
-                }`}
-                title="สลับ Auto-refresh"
-              >
-                {isActive ? `${secondsLeft}s` : 'OFF'}
-              </button>
-
               <button
                 onClick={() => setIsMobileMenuOpen((v) => !v)}
                 className="p-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white transition-all cursor-pointer"
@@ -284,22 +280,6 @@ export default function MainPage() {
                   รีเฟรชข้อมูล
                 </span>
                 <span className="text-[10px] text-white/70">กดเพื่ออัปเดต</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  toggle()
-                  setIsMobileMenuOpen(false)
-                }}
-                className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 active:bg-white/25 transition-all text-xs font-bold"
-              >
-                <span className="flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  อัปเดตอัตโนมัติ (Auto Refresh)
-                </span>
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${isActive ? 'bg-green-500 text-white' : 'bg-neutral-600 text-white/70'}`}>
-                  {isActive ? `เปิด (${secondsLeft}s)` : 'ปิด'}
-                </span>
               </button>
 
               <button
@@ -343,8 +323,6 @@ export default function MainPage() {
         <footer className="bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800 px-4 sm:px-6 3xl:px-10 py-2 sm:py-2.5 3xl:py-4 flex items-center justify-between text-xs sm:text-sm 2xl:text-base 3xl:text-xl text-neutral-600 dark:text-neutral-300 shrink-0 transition-colors">
           <div className="flex items-center gap-3">
             <span className="truncate font-medium">สแกนล่าสุด: {lastScanTime}</span>
-            <span className="text-neutral-300 dark:text-neutral-600 hidden sm:inline">•</span>
-            <span className="hidden sm:inline font-medium">Auto-refresh: {isActive ? 'ON (5s)' : 'OFF'}</span>
           </div>
           <div className="flex items-center gap-1.5">
             {!isOnline ? (
