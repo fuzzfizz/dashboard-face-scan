@@ -106,7 +106,7 @@ export default function MainPage() {
   const [selectedParticipant, setSelectedParticipant] = useState(null)
 
   const handleDetailRefresh = useCallback(() => { refetchDetail() }, [refetchDetail])
-  const { secondsLeft, isActive, toggle } = useAutoRefresh(handleDetailRefresh, 5000, !!selectedEventId)
+  const { secondsLeft, isActive, toggle } = useAutoRefresh(handleDetailRefresh, 5000, true)
 
   // Latest participant
   const sorted = useMemo(() => {
