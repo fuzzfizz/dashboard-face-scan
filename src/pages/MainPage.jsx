@@ -348,7 +348,6 @@ export default function MainPage() {
           <div className="w-full lg:w-[30%] min-h-[480px] lg:min-h-0 flex-1 flex flex-col lg:overflow-hidden">
             <RightPanel
               participants={participants}
-              summary={summary}
               selectedId={displayParticipant?.regis_id}
               onSelect={(p) => setSelectedParticipant(p)}
             />
